@@ -131,21 +131,22 @@ export default function TenderColumns() {
       },
     },
     {
-      accessorKey: "epublishedDate",
+      accessorKey: "sub-Industry",
       header: ({ column }) => (
         <Button
           className="text-xs text-gray-500"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          title="Sort by Published Date"
+          title="Sort by Sub-Industry"
         >
-          Published Date
+          Sub-Industry
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="text-xs text-center w-32" title="Published Date">
-          {formatDate(row.getValue("epublishedDate"))}
+        <div className="text-xs text-center w-32" title="Sub-Industry">
+          {/* {formatDate(row.getValue("epublishedDate"))} */}
+          {row.original.subIndustry}
         </div>
       ),
     },
@@ -169,34 +170,40 @@ export default function TenderColumns() {
       ),
     },
     {
-      accessorKey: "bidOpeningDate",
+      accessorKey: "district",
       header: ({ column }) => (
         <Button
           className="text-xs text-gray-500"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          title="Sort by Bid Opening Date"
+          title="Sort by District"
         >
-          Bid Opening Date
+          District
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="text-xs text-center w-32" title="Bid Opening Date">
-          {formatDate(row.getValue("bidOpeningDate"))}
+        <div className="text-xs text-center w-32" title="District">
+          <span className="-ml-10">{row.original.district}</span>
         </div>
       ),
     },
     {
-      accessorKey: "refNo",
+      accessorKey: "EMDValue",
       header: ({ column }) => (
-        <div className="text-xs text-gray-500 ml-3" title="Reference No">
-          Reference No
-        </div>
+        <Button
+          className="text-xs text-gray-500"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          title="Sort by EMD Value"
+        >
+          EMD Value
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
       ),
       cell: ({ row }) => (
-        <div className="text-xs line-clamp-2 text-center" title="Reference No">
-          {row.getValue("refNo")}
+        <div className="text-xs text-center -ml-2" title="EMD Value">
+          {row.original.EMDAmountin}
         </div>
       ),
     },

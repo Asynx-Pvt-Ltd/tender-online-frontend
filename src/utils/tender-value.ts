@@ -23,6 +23,35 @@ export const parseIndianFormat = (value: string): number => {
   return parseFloat(cleanValue);
 };
 
+export const formatIndianRupeePrice = (amount: any): string => {
+  if (
+    amount === undefined ||
+    amount === null ||
+    amount === 0 ||
+    Number.isNaN(amount)
+  ) {
+    return "Refer the document";
+  }
+
+  const numAmount = Number(String(amount).replace(/,/g, ""));
+  if (Number.isNaN(numAmount)) {
+    return "Refer the document";
+  }
+
+  const formatWithUnits = (value: number): string => {
+    if (value >= 1e7) {
+      const crore = value / 1e7;
+      return `${crore.toFixed(2).replace(/\.00$/, "")} Crore`;
+    } else if (value >= 1e5) {
+      const lakh = value / 1e5;
+      return `${lakh.toFixed(2).replace(/\.00$/, "")} Lakh`;
+    }
+    return value.toLocaleString("en-IN");
+  };
+
+  return `₹${formatWithUnits(numAmount)}`;
+};
+
 export const getTenderValueCategory = (value: string): string => {
   const numericValue = parseIndianFormat(value);
   if (numericValue < 1000000) return "1"; // Less than 10L

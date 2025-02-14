@@ -28,7 +28,10 @@ import Loading from "../ui/loading";
 import TenderDetailsDialog from "../shared/TenderDetailsDialog";
 import TenderColumns, { formatDate } from "./tender-columns";
 import { toast } from "sonner";
-import { getTenderValueCategory } from "@/utils/tender-value";
+import {
+  formatIndianRupeePrice,
+  getTenderValueCategory,
+} from "@/utils/tender-value";
 import { clear } from "console";
 
 export function DataTableTender({ setSearch, search, setTenderLength }: any) {
@@ -449,9 +452,11 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
                 <div className="flex items-center gap-2 font-bold text-[#667085] text-[12px]">
                   Tender Value:
                   <div className="text-[14px] text-[#500187] font-bold">
-                    {tender.tenderValue
-                      ? tender.tenderValue
-                      : "Refer the Document"}
+                    {formatIndianRupeePrice(
+                      tender.tenderValue
+                        ? tender.tenderValue
+                        : "Refer the Document"
+                    )}
                   </div>
                 </div>
 

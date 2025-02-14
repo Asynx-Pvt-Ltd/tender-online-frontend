@@ -441,7 +441,7 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
                 />
               </svg>
               <p className="lg:text-sm text-[10px]">
-                {selectedRowData?.address}
+                {selectedRowData?.location}
               </p>
             </div>
             <div className="flex text-black justify-center items-center gap-2 py-2">

@@ -224,7 +224,7 @@ export default function Home() {
       {!isLoggedIn ? (
         <div className="flex lg:flex-row flex-col lg:gap-0 gap-16 h-fit">
           {/* Left Pane */}
-          <div className="lg:flex relative w-full h-fit items-start mt-[7vh] lg:mt-[20vh] justify-center flex-1 text-black">
+          <div className="lg:flex relative w-full h-fit items-start mt-[7vh] lg:mt-[17vh] justify-center flex-1 text-black">
             <div className=" text-center  w-full relative">
               {/* <div className="fill-black bg-black opacity-50 absolute inset-0"></div> */}
               <div className="object-cover w-full h-fit" />
@@ -235,7 +235,7 @@ export default function Home() {
                 )}
               >
                 <div className="flex flex-col-reverse justify-center items-center lg:gap-2">
-                  <div className="pt-12">
+                  <div className="pt-5">
                     <StickyNotice />
                   </div>
                   <div className="text-xl font-normal">
