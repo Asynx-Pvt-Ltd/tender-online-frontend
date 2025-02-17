@@ -41,13 +41,13 @@ const TenderHeader = ({ tenderLength }: { tenderLength: number | null }) => {
       <div className="flex items-center gap-3 w-full">
         <div className="lg:bg-[#171717] bg-white py-2 w-full  px-0 lg:px-4 flex items-center justify-between gap-6 rounded-full">
           <div className="flex items-center gap-3">
-            <div className="lg:pl-0 pl-8 hidden lg:block">
+            <div className="px-4 lg:pl-0 hidden lg:block">
               <SelectState />
             </div>
-            <div className="lg:block hidden">
-              <h1 className="text-black lg:text-white text-center text-base not-italic font-medium leading-[25px] flex gap-1">
+            <div className="block">
+              <h1 className="lg:text-white text-black text-center lg:text-base not-italic font-medium leading-[25px] text-[16px] lg:flex lg:gap-1 lg:ml-0 ml-5">
                 Showing {tenderLength != null ? tenderLength : <LoadingDots />}{" "}
-                Tenders in Tamilnadu{" "}
+                Tenders{" "}
               </h1>
             </div>
           </div>
@@ -100,7 +100,7 @@ const TenderHeader = ({ tenderLength }: { tenderLength: number | null }) => {
                 </h1>
               </Link> */}
 
-              <div className="lg:block">
+              <div className="lg:block mr-3 lg:mr-0">
                 <DropdownMenuDemo />
               </div>
             </div>
