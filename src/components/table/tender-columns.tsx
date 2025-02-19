@@ -131,21 +131,14 @@ export default function TenderColumns() {
       },
     },
     {
-      accessorKey: "sub-Industry",
+      accessorKey: "sub-industry",
       header: ({ column }) => (
-        <Button
-          className="text-xs text-gray-500"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          title="Sort by Sub-Industry"
-        >
+        <div className="ml-3 text-xs text-gray-500" title="Sub-Industry">
           Sub-Industry
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </div>
       ),
       cell: ({ row }) => (
-        <div className="text-xs text-center w-32" title="Sub-Industry">
-          {/* {formatDate(row.getValue("epublishedDate"))} */}
+        <div className="line-clamp-2 text-center text-xs" title="Sub-Industry">
           {row.original.subIndustry}
         </div>
       ),
@@ -164,7 +157,10 @@ export default function TenderColumns() {
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="text-xs text-center w-32" title="Bid Submission Date">
+        <div
+          className="ml-3 w-32 text-center text-xs"
+          title="Bid Submission Date"
+        >
           {formatDate(row.getValue("bidSubmissionDate"))}
         </div>
       ),
@@ -172,37 +168,25 @@ export default function TenderColumns() {
     {
       accessorKey: "district",
       header: ({ column }) => (
-        <Button
-          className="text-xs text-gray-500"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          title="Sort by District"
-        >
+        <div className="ml-4 text-xs text-gray-500" title="District">
           District
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </div>
       ),
       cell: ({ row }) => (
-        <div className="text-xs text-center w-32" title="District">
-          <span className="-ml-10">{row.original.district}</span>
+        <div className="line-clamp-2 text-center text-xs" title="District">
+          {row.getValue("district")}
         </div>
       ),
     },
     {
-      accessorKey: "EMDValue",
+      accessorKey: "emdValue",
       header: ({ column }) => (
-        <Button
-          className="text-xs text-gray-500"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          title="Sort by EMD Value"
-        >
+        <div className="ml-3 text-xs text-gray-500" title="EMD Value">
           EMD Value
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </div>
       ),
       cell: ({ row }) => (
-        <div className="text-xs text-center -ml-2" title="EMD Value">
+        <div className="line-clamp-2 text-center text-xs" title="EMD Value">
           {row.original.EMDAmountin}
         </div>
       ),
@@ -212,7 +196,7 @@ export default function TenderColumns() {
       header: ({ column }) => (
         <Button
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="text-xs text-center text-gray-500"
+          className="text-center text-xs text-gray-500"
           variant="ghost"
           title="Tender Value (₹)"
         >
@@ -221,7 +205,7 @@ export default function TenderColumns() {
         </Button>
       ),
       cell: ({ row }) => (
-        <div title="Tender Value (₹)">
+        <div title="Tender Value (₹)" className="text-center">
           {formatIndianRupeePrice(row.getValue("tenderValue"))}
         </div>
       ),
