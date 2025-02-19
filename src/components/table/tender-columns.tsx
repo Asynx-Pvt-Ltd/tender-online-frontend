@@ -2,9 +2,11 @@
 
 import { useRouter } from "next/router";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Bookmark, BookmarkCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
 
 // Your format functions (unchanged)
 export const formatDate = (isoDateString: string): string => {
@@ -65,10 +67,93 @@ export function formatIndianRupeePrice(amount: any): string {
   return `₹${formatWithUnits(numAmount)}`;
 }
 
-export default function TenderColumns() {
-  // const router = useRouter();
-  // const isForYou = router.query.foryou === "true"; // Check if the query parameter is present
+// Save tender button component
+const SaveTenderButton = ({ tenderId }: { tenderId: string }) => {
+  const [isSaved, setIsSaved] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  // Check if tender is saved on component mount
+  useEffect(() => {
+    const checkSavedStatus = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_ENPOINT}/api/auth/check-saved-tender`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+            },
+            body: JSON.stringify({ tenderId }),
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setIsSaved(data.isSaved);
+        }
+      } catch (error) {
+        console.error("Error checking saved status:", error);
+      }
+    };
+
+    checkSavedStatus();
+  }, [tenderId]);
+
+  const toggleSavedStatus = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent row click event
+
+    if (isLoading) return;
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_ENPOINT}/api/auth/save-tender`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+          },
+          body: JSON.stringify({ tenderId }),
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        setIsSaved(!isSaved);
+        toast.success(result.message);
+      } else {
+        const error = await response.json();
+        toast.error(error.message || "Failed to save tender");
+      }
+    } catch (error) {
+      console.error("Error saving tender:", error);
+      toast.error("Network error occurred");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      className="h-8 w-8"
+      onClick={toggleSavedStatus}
+      disabled={isLoading}
+      title={isSaved ? "Remove from saved" : "Save tender"}
+    >
+      {isSaved ? (
+        <BookmarkCheck className="h-5 w-5 text-black" />
+      ) : (
+        <Bookmark className="h-5 w-5 text-gray-500 hover:text-black" />
+      )}
+    </Button>
+  );
+};
+
+export default function TenderColumns() {
   const columns: ColumnDef<any>[] = [
     {
       id: "select",
@@ -219,6 +304,13 @@ export default function TenderColumns() {
 
         return valueA - valueB;
       },
+    },
+    {
+      id: "save",
+      header: "Actions",
+      cell: ({ row }) => <SaveTenderButton tenderId={row.original._id} />,
+      enableSorting: false,
+      enableHiding: false,
     },
   ];
 
