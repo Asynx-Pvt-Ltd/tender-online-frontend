@@ -1,13 +1,18 @@
 "use client";
+import { formatDate } from "@/utils/utils";
 import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
 
+interface FeedbackMessage {
+  message: string;
+  timestamp: string;
+}
+
 const Page = () => {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<string[]>([]);
+  const [feedbacks, setFeedbacks] = useState<FeedbackMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch all messages when component mounts
   useEffect(() => {
     fetchMessages();
   }, []);
@@ -28,7 +33,16 @@ const Page = () => {
       }
 
       const data = await response.json();
-      setMessages(data.messages.reverse());
+
+      // Combine messages and timestamps into an array of objects
+      const combinedFeedback = data.messages
+        .map((msg: string, index: number) => ({
+          message: msg,
+          timestamp: data.timestampImprovement[index] || "No timestamp",
+        }))
+        .reverse();
+
+      setFeedbacks(combinedFeedback);
       setIsLoading(false);
     } catch (error) {
       toast.error("Failed to load messages");
@@ -57,14 +71,22 @@ const Page = () => {
       }
 
       const data = await response.json();
-      setMessages(data.improvement); // Update with the new array from backend
-      setMessage(""); // Clear textarea
-      toast.success("Message stored successfully");
+
+      // Create combined feedback array from the response
+      const combinedFeedback = data.improvement.map(
+        (msg: string, index: number) => ({
+          message: msg,
+          timestamp: data.timestampImprovement[index] || "No timestamp",
+        })
+      );
+
+      setFeedbacks(combinedFeedback);
+      setMessage("");
+      toast.success("Feedback submitted successfully");
     } catch (error) {
       toast.error("Failed to store message");
     }
   };
-
   return (
     <div className="p-6 w-full min-h-screen flex flex-col items-center justify-center">
       <div className="w-full max-w-3xl bg-white rounded-3xl p-6 space-y-6">
@@ -91,7 +113,6 @@ const Page = () => {
           Send Feedback
         </button>
 
-        {/* Messages Display Section */}
         <div className="mt-8 space-y-4">
           <h3 className="text-xl font-semibold text-gray-700">
             Previous Feedback
@@ -99,14 +120,17 @@ const Page = () => {
 
           {isLoading ? (
             <div className="text-center text-gray-500">Loading messages...</div>
-          ) : messages.length > 0 ? (
+          ) : feedbacks.length > 0 ? (
             <div className="space-y-3">
-              {messages.map((msg, index) => (
+              {feedbacks.map((feedback, index) => (
                 <div
                   key={index}
                   className="p-4 bg-gray-50 rounded-lg border border-gray-200"
                 >
-                  <p className="text-gray-700">{msg}</p>
+                  <p className="text-gray-700">{feedback.message}</p>
+                  <p className="text-sm text-gray-500 mt-2">
+                    {formatDate(feedback.timestamp)}
+                  </p>
                 </div>
               ))}
             </div>
