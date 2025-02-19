@@ -31,6 +31,11 @@ import { toast } from "sonner";
 import { formatIndianRupeePrice, getTenderValueCategory } from "@/utils/utils";
 import { clear } from "console";
 
+interface ViewedTenderData {
+  tenderIds: string[];
+  timestamp: number;
+}
+
 export function DataTableTender({ setSearch, search, setTenderLength }: any) {
   const columns = TenderColumns();
   const [foryou, setForYou] = React.useState<any | null>(null);
@@ -44,6 +49,11 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
   const [selectedRowData, setSelectedRowData] = React.useState(null);
   const [selectedRow, setSelectedRow] = React.useState<any>([]);
 
+  const [viewedTenders, setViewedTenders] = React.useState<string[]>([]);
+  const EXPIRATION_TIME = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+  // const EXPIRATION_TIME = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+  // const EXPIRATION_TIME = 5 * 1000;
+
   React.useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
@@ -51,6 +61,26 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
       if (foryouValue == "true") setForYou(true);
       else setForYou(false);
     }
+  }, []);
+
+  React.useEffect(() => {
+    const loadViewedTenders = () => {
+      const stored = localStorage.getItem("viewedTenders");
+      if (stored) {
+        const data: ViewedTenderData = JSON.parse(stored);
+        const now = new Date().getTime();
+
+        // Check if data has expired
+        if (now - data.timestamp < EXPIRATION_TIME) {
+          setViewedTenders(data.tenderIds);
+        } else {
+          // Clear expired data
+          localStorage.removeItem("viewedTenders");
+          setViewedTenders([]);
+        }
+      }
+    };
+    loadViewedTenders();
   }, []);
 
   const {
@@ -155,6 +185,20 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 
   const handleRowClick = useCallback((rowData: any) => {
     setSelectedRowData(rowData);
+
+    // Add the tender ID to viewedTenders
+    setViewedTenders((prev) => {
+      if (!prev.includes(rowData._id)) {
+        const newTenders = [...prev, rowData._id];
+        const dataToStore: ViewedTenderData = {
+          tenderIds: newTenders,
+          timestamp: new Date().getTime(),
+        };
+        localStorage.setItem("viewedTenders", JSON.stringify(dataToStore));
+        return newTenders;
+      }
+      return prev;
+    });
   }, []);
 
   const table = useReactTable({
@@ -387,7 +431,11 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
-                    className="hover:scale-[1.01] transition-all"
+                    className={`hover:scale-[1.01] transition-all ${
+                      viewedTenders.includes(row.original._id)
+                        ? "bg-purple-50 hover:bg-purple-100"
+                        : ""
+                    }`}
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell
@@ -433,7 +481,11 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
               <div
                 onClick={() => handleRowClick(tender)}
                 key={tender._id}
-                className="bg-white shadow-md rounded-lg mb-4 p-4 hover:scale-[1.01] transition-all cursor-pointer flex flex-col gap-2 h-auto"
+                className={`bg-white shadow-md rounded-lg mb-4 p-4 hover:scale-[1.01] transition-all cursor-pointer flex flex-col gap-2 h-auto ${
+                  viewedTenders.includes(tender._id)
+                    ? "bg-purple-50 hover:bg-purple-100"
+                    : ""
+                }`}
               >
                 <div>
                   <p className="text-[#667085] text-[10px] font-semibold">
@@ -448,7 +500,7 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 
                 <div className="flex items-center gap-2 font-bold text-[#667085] text-[12px]">
                   Tender Value:
-                  <div className="text-[14px] text-[#500187] font-bold">
+                  <div className="text-[14px] text-black font-bold">
                     {formatIndianRupeePrice(
                       tender.tenderValue
                         ? tender.tenderValue
@@ -457,7 +509,7 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
                   </div>
                 </div>
 
-                <div className="flex items-center text-[#4B0082] text-[10px] justify-between font-semibold pt-1">
+                <div className="flex items-center text-black text-[10px] justify-between font-semibold pt-1">
                   <p className="flex gap-1">
                     Opening Date:
                     <span className="font-normal">
