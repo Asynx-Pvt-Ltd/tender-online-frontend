@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { MouseEvent } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -8,7 +8,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { MultiSelect } from "@mantine/core";
-import { X } from "lucide-react";
+import { Bookmark, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DatePickerWithRange } from "../shared/multi-select-demo";
 
@@ -33,6 +33,12 @@ type DistrictMapping = {
 const districtMapping: DistrictMapping = {
   tiruvallur: ["Tiruvallur", "Thiruvallur"],
   thiruvallur: ["Tiruvallur", "Thiruvallur"],
+};
+const handleSavedClick = (event: MouseEvent<HTMLButtonElement>) => {
+  // Prevent default behavior if necessary
+  event.preventDefault();
+  // Redirect to the desired location
+  window.location.href = "/profile/saved";
 };
 
 export default function TenderFilters({
@@ -188,6 +194,13 @@ export const FilterLabels = ({
           Reset All
         </button>
       )}
+      <button
+        className="flex items-center gap-1 px-4 rounded-md border py-2 text-xs bg-white hover:bg-gray-100"
+        onClick={handleSavedClick}
+      >
+        <Bookmark className="h-5 w-5 text-gray-400" />
+        Saved Tenders
+      </button>
       {selectedDistricts?.map((district: string) => (
         <FilterTag
           key={district}
