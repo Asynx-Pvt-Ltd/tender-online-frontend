@@ -38,7 +38,7 @@ const handleSavedClick = (event: MouseEvent<HTMLButtonElement>) => {
   // Prevent default behavior if necessary
   event.preventDefault();
   // Redirect to the desired location
-  window.location.href = "/profile/saved";
+  window.location.href = "/profile/saved-tenders";
 };
 
 export default function TenderFilters({
