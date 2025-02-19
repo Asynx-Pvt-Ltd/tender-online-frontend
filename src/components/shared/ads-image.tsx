@@ -6,13 +6,17 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
-import { type CarouselApi } from "@/components/ui/carousel";
 import Link from "next/link";
+
+interface Ad {
+  imageUrl: string;
+  url: string;
+}
 
 const AdsImage = () => {
   const [api, setApi] = useState<CarouselApi>();
-
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
@@ -27,13 +31,17 @@ const AdsImage = () => {
     };
   }, [api]);
 
-  const { data: ads } = useQuery<any>({
+  const { data: ads } = useQuery<Ad[]>({
     queryKey: ["Ads"],
     queryFn: () =>
       fetch(process.env.NEXT_PUBLIC_API_ENPOINT + `/api/ads/images`).then(
         (res) => res.json()
       ),
   });
+
+  if (!ads || !Array.isArray(ads) || ads.length === 0) {
+    return null;
+  }
 
   return (
     <div className="pt-6 px-4 lg:px-4 pb-8">
@@ -43,16 +51,16 @@ const AdsImage = () => {
         opts={{ loop: true, align: "start" }}
       >
         <CarouselContent>
-          {ads?.map((ads: any, index: number) => (
+          {ads.map((ad: Ad, index: number) => (
             <CarouselItem key={index} className="lg:basis-1/2 basis-full">
               <Link
-                target="_black"
-                href={ads?.url || "/"}
+                target="_blank"
+                href={ad.url || "/"}
                 className="lg:h-64 h-28 w-full"
               >
                 <img
-                  src={ads.imageUrl}
-                  alt=""
+                  src={ad.imageUrl}
+                  alt="Advertisement"
                   className="lg:h-52 h-28 object-cover w-full rounded-xl"
                 />
               </Link>
