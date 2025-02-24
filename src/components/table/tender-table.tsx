@@ -30,6 +30,7 @@ import TenderColumns, { formatDate } from "./tender-columns";
 import { toast } from "sonner";
 import { formatIndianRupeePrice, getTenderValueCategory } from "@/utils/utils";
 import { clear } from "console";
+import SaveTenderButton from "../shared/saveButton";
 
 interface ViewedTenderData {
   tenderIds: string[];
@@ -481,17 +482,18 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
               <div
                 onClick={() => handleRowClick(tender)}
                 key={tender._id}
-                className={`bg-white shadow-md rounded-lg mb-4 p-4 hover:scale-[1.01] transition-all cursor-pointer flex flex-col gap-2 h-auto ${
+                className={`shadow-md rounded-lg mb-4 p-4 hover:scale-[1.01] transition-all cursor-pointer flex flex-col gap-2 h-auto ${
                   viewedTenders.includes(tender._id)
                     ? "bg-purple-50 hover:bg-purple-100"
                     : ""
                 }`}
               >
-                <div>
+                <div className="flex justify-between items-center">
                   <p className="text-[#667085] text-[10px] font-semibold">
                     Reference No:{" "}
                     <span className="font-normal">{tender.refNo}</span>
                   </p>
+                  <SaveTenderButton tenderId={row.original._id} />
                 </div>
 
                 <div className="flex items-center justify-between">
