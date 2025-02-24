@@ -9,8 +9,10 @@ export default function RootLayout({
 }>) {
   return (
     <div className="lg:flex lg:flex-row flex-col">
-      <Sidebar />
-      {children}
+      <div>
+        <Sidebar />
+      </div>
+      <div className="w-full">{children}</div>
     </div>
   );
 }
