@@ -26,6 +26,8 @@ interface TenderFiltersProps {
   clearFilters: () => void;
   dropdownData: any;
   foryou: boolean;
+  showClosedTenders: boolean;
+  setShowClosedTenders: (show: boolean) => void;
 }
 type DistrictMapping = {
   [key: string]: string[];
@@ -55,6 +57,8 @@ export default function TenderFilters({
   clearFilters,
   dropdownData,
   foryou,
+  showClosedTenders,
+  setShowClosedTenders,
 }: TenderFiltersProps) {
   const handleMultiSelectChange = (label: string, value: any) => {
     switch (label) {
@@ -154,6 +158,12 @@ export default function TenderFilters({
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2 flex-wrap lg:flex-nowrap">
         {dropdownLabels.map((label) => renderMultiSelect(label))}
+        <Button
+          variant={showClosedTenders ? "default" : "outline"}
+          onClick={() => setShowClosedTenders(!showClosedTenders)}
+        >
+          Closed Tenders
+        </Button>
         <div className="">
           <DatePickerWithRange
             setDateRange={setDateRange}
@@ -179,6 +189,8 @@ export const FilterLabels = ({
   clearFilters,
   dropdownData,
   foryou,
+  showClosedTenders,
+  setShowClosedTenders,
 }: TenderFiltersProps) => {
   return (
     <div className="flex flex-wrap gap-2 ml-2 mt-2">
@@ -262,6 +274,13 @@ export const FilterLabels = ({
           }}
         />
       ))}
+      {showClosedTenders && (
+        <FilterTag
+          label="Closed Tenders"
+          type="status"
+          onRemove={() => setShowClosedTenders(false)}
+        />
+      )}
     </div>
   );
 };
