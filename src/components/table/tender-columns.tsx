@@ -130,19 +130,7 @@ export default function TenderColumns() {
         );
       },
     },
-    {
-      accessorKey: "sub-industry",
-      header: ({ column }) => (
-        <div className="ml-3 text-xs text-gray-500" title="Sub-Industry">
-          Sub-Industry
-        </div>
-      ),
-      cell: ({ row }) => (
-        <div className="line-clamp-2 text-center text-xs" title="Sub-Industry">
-          {row.original.subIndustry}
-        </div>
-      ),
-    },
+
     {
       accessorKey: "bidSubmissionDate",
       header: ({ column }) => (
@@ -188,6 +176,25 @@ export default function TenderColumns() {
       cell: ({ row }) => (
         <div className="line-clamp-2 text-center text-xs" title="EMD Value">
           {row.original.EMDAmountin}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "EMD Exemption Allowed",
+      header: ({ column }) => (
+        <div
+          className="ml-3 text-xs text-gray-500"
+          title="EMD Exemption Allowed"
+        >
+          EMD Exemption Allowed
+        </div>
+      ),
+      cell: ({ row }) => (
+        <div
+          className="line-clamp-2 text-center text-xs"
+          title="EMD Exemption Allowed"
+        >
+          {row.original.EMDExemptionAllowed}
         </div>
       ),
     },
