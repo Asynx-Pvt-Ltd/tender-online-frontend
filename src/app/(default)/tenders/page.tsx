@@ -4,12 +4,10 @@ import TenderHeader from "@/components/shared/tender-header";
 import { useQuery } from "@tanstack/react-query";
 import { DataTableTender } from "@/components/table/tender-table";
 import AdsImage from "@/components/shared/ads-image";
-import MobileTenderList from "@/components/shared/mobile-tenders";
-import { DatePickerWithRange } from "@/components/shared/multi-select-demo";
 import Footer from "@/components/shared/footer";
-import { CheckSuggestion } from "@/components/shared/check-suggestion";
 import Loading from "@/components/ui/loading";
-import { useRouter } from "next/navigation";
+import InactiveUserMessage from "@/components/shared/inActiveUser";
+import FreeTrialComplete from "@/components/shared/freeTrailComplete";
 
 export default function Page() {
   const [search, setSearch] = useState("");
@@ -33,75 +31,44 @@ export default function Page() {
   const [isMobile, setIsMobile] = useState<any>(false);
 
   useEffect(() => {
-    // Only run this code on the client-side
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
 
-    // Set initial value
     handleResize();
 
-    // Add event listener
     window.addEventListener("resize", handleResize);
 
-    // Clean up the event listener on unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   if (isLoading) {
     return <Loading />;
   }
+  const renderContent = () => {
+    if (userStatus?.status === "inactive") {
+      return <InactiveUserMessage />;
+    } else if (!userStatus?.isTendersVisible) {
+      return <FreeTrialComplete />;
+    } else {
+      return (
+        <DataTableTender
+          setSearch={setSearch}
+          search={search}
+          setTenderLength={setTenderLength}
+        />
+      );
+    }
+  };
 
   return (
     <main className="w-full bg-white">
       <TenderHeader tenderLength={tenderLength} />
-      {/* <CheckSuggestion /> */}
       <div className="w-full px-4">
-        {userStatus?.isTendersVisible ? (
-          <>
-            <DataTableTender
-              setSearch={setSearch}
-              search={search}
-              setTenderLength={setTenderLength}
-            />
-          </>
-        ) : (
-          <FreeTrialComplete />
-        )}
-
+        {renderContent()}
         <AdsImage />
       </div>
       <Footer />
     </main>
   );
 }
-
-interface FreeTrialCompleteProps {
-  message?: string;
-  buttonText?: string;
-}
-
-const FreeTrialComplete: React.FC<FreeTrialCompleteProps> = ({
-  message = "Your free trial has ended. Please subscribe to continue.",
-  buttonText = "Go to Pricing",
-}) => {
-  const navigate = useRouter();
-
-  const handleNavigate = () => {
-    navigate.push("/pricing"); // Adjust this path based on your actual pricing page route
-  };
-
-  return (
-    <div className="w-full max-w-lg mx-auto px-4 sm:px-0">
-      <div className="bg-gradient-to-r from-red-400 via-red-500 to-red-600 rounded-3xl p-4 sm:p-6 text-white shadow-lg text-center">
-        <h2 className="text-lg sm:text-xl font-semibold mb-4">{message}</h2>
-        <button
-          onClick={handleNavigate}
-          className="mt-4 bg-white text-red-600 hover:bg-gray-200 font-bold py-2 px-4 sm:px-6 rounded-full transition-all duration-300 ease-in-out"
-        >
-          {buttonText}
-        </button>
-      </div>
-    </div>
-  );
-};
