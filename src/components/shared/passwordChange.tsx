@@ -26,6 +26,14 @@ const schema = yup.object().shape({
       /[!@#$%^&*(),.?":{}|<>]/,
       "Password must contain at least one special character"
     )
+    .test(
+      "not-same-as-current",
+      "New password cannot be the same as your current password",
+      function (value) {
+        const currentPassword = this.parent.currentPassword;
+        return value !== currentPassword;
+      }
+    )
     .required("New password is required"),
   confirmPassword: yup
     .string()
