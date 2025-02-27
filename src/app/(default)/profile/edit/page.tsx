@@ -254,7 +254,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import ChangePassword from "../security/page";
+import ChangePassword from "../../../../components/shared/passwordChange";
 function SelectState({ value, onChange }: any) {
   return (
     <Select disabled defaultValue="tamil-nadu">
