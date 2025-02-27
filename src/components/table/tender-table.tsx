@@ -407,68 +407,68 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
         </div>
       </div>
 
-      <div className="w-full hidden lg:block">
-        <ScrollArea>
-          <Table className="overflow-hidden">
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id} className="hover:bg-transparent">
-                  {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
+      <div className="w-full hidden sm:block md:block lg:block">
+        {/* <ScrollArea> */}
+        <Table className="min-w-full lg:overflow-hidden md:overflow-scroll">
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id} className="hover:bg-transparent">
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                  className={`hover:scale-[1.01] transition-all ${
+                    viewedTenders.includes(row.original._id)
+                      ? "bg-purple-50 hover:bg-purple-100"
+                      : ""
+                  }`}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell
+                      key={cell.id}
+                      className="cursor-pointer font-roboto"
+                      onClick={() => {
+                        if (cell.column.columnDef.id !== "select") {
+                          handleRowClick(row.original);
+                        }
+                      }}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
                   ))}
                 </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                    className={`hover:scale-[1.01] transition-all ${
-                      viewedTenders.includes(row.original._id)
-                        ? "bg-purple-50 hover:bg-purple-100"
-                        : ""
-                    }`}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        className="cursor-pointer font-roboto"
-                        onClick={() => {
-                          if (cell.column.columnDef.id !== "select") {
-                            handleRowClick(row.original);
-                          }
-                        }}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </ScrollArea>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+        {/* </ScrollArea> */}
         <TenderDetailsDialog
           selectedRowData={selectedRowData}
           setSelectedRowData={setSelectedRowData}
