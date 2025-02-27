@@ -54,6 +54,7 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
   const EXPIRATION_TIME = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
   // const EXPIRATION_TIME = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
   // const EXPIRATION_TIME = 5 * 1000;
+  const [showClosedTenders, setShowClosedTenders] = React.useState(false);
 
   React.useEffect(() => {
     if (typeof window !== "undefined") {
@@ -142,6 +143,7 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
       page,
       selectedTenderValues.join(","),
       sorting,
+      showClosedTenders,
     ],
     queryFn: async () => {
       const params = buildQueryParams();
@@ -158,6 +160,9 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
           params.append("tenderValue", value)
         );
       }
+      if (showClosedTenders) {
+        params.append("showClosed", "true");
+      }
       params.append("limit", "10");
       params.append("offset", (page * 10).toString());
 
@@ -173,7 +178,7 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
   });
   React.useEffect(() => {
     refetch();
-  }, [selectedTenderValues, refetch]);
+  }, [selectedTenderValues, showClosedTenders, refetch]);
   const clearFilters = useCallback(() => {
     setSelectedDistricts([]);
     setSelectedTenderValues([]);
@@ -181,6 +186,7 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
     setClassification([]);
     setDateRange(null);
     setSearchList([]);
+    setShowClosedTenders(false);
     refetch();
   }, [refetch]);
 
@@ -378,6 +384,8 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
             clearFilters={clearFilters}
             dropdownData={dropdownData}
             foryou={foryou}
+            showClosedTenders={showClosedTenders}
+            setShowClosedTenders={setShowClosedTenders}
           />
         </div>
         <div className="flex items-start gap-2">
@@ -395,6 +403,8 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
             clearFilters={clearFilters}
             dropdownData={dropdownData}
             foryou={foryou}
+            showClosedTenders={showClosedTenders}
+            setShowClosedTenders={setShowClosedTenders}
           />
           {isAnyRowSelected && (
             <button
