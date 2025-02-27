@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { KeyRound } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState, useRef, useEffect } from "react";
@@ -178,6 +179,11 @@ const menuItems: MenuItem[] = [
       </svg>
     ),
     link: "/profile/saved-tenders",
+  },
+  {
+    label: "Change Password",
+    icon: <KeyRound />,
+    link: "/profile/change-password",
   },
 ];
 

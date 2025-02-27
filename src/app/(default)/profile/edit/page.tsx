@@ -52,7 +52,6 @@ const Page = () => {
       <h2 className="text-3xl text-black font-bold">Profile Information</h2>
 
       <ProfileEditForm initialData={initialData} onSubmit={handleFormSubmit} />
-      <ChangePassword />
     </div>
   );
 };
