@@ -52,7 +52,20 @@ const Page = () => {
       <h2 className="text-3xl text-black font-bold">Profile Information</h2>
 
       <ProfileEditForm initialData={initialData} onSubmit={handleFormSubmit} />
-      <ChangePassword />
+      {data.isGoogleAuth === true ? (
+        <div>
+          <div className="p-6 lg:my-4 bg-white border h-fit w-full rounded-3xl">
+            <h2 className="text-2xl font-bold text-gray-700 mb-6">
+              Change Password
+            </h2>
+            <p className="text-lg text-gray-600">
+              Your Account is Managed by Google.
+            </p>
+          </div>
+        </div>
+      ) : (
+        <ChangePassword />
+      )}
     </div>
   );
 };
