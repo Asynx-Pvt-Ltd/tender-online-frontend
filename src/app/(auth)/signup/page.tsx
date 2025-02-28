@@ -14,7 +14,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { Close } from "@radix-ui/react-dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Joi from "joi";
-import { Eye } from "lucide-react";
+import { Eye, Loader2 } from "lucide-react";
 import { EyeClosedIcon } from "@radix-ui/react-icons";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
@@ -22,6 +22,9 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { Button } from "@/components/ui/button";
 const Signup = ({ setIsLogin }: any) => {
   const router = useRouter();
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpVerifying, setOtpVerifying] = useState(false);
+  const [isOtpVerified, setIsOtpVerified] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<any>({
     name: "",
@@ -103,6 +106,11 @@ const Signup = ({ setIsLogin }: any) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!isOtpVerified) {
+      toast.error("Please verify your email with OTP first");
+      return;
+    }
+
     if (!otp) {
       toast.error("Please enter the OTP");
       return;
@@ -144,8 +152,17 @@ const Signup = ({ setIsLogin }: any) => {
 
       console.log(data, "data");
 
-      if (data.code === 400) {
-        toast.error(data.message);
+      if (response.data.code === 400) {
+        if (response.data.message.includes("already exists")) {
+          toast.error(response.data.message);
+          setErrors({
+            ...errors,
+            email: "Email or phone number already in use",
+          });
+        } else {
+          toast.error(response.data.message);
+        }
+        setLoading(false);
         return;
       }
 
@@ -166,16 +183,57 @@ const Signup = ({ setIsLogin }: any) => {
   };
 
   const handletootpverify = async () => {
-    const realotp = otp?.result?.[0]?.otp;
-    if (realotp !== typeOtp) {
-      toast.error("OTP is invalid");
+    if (!typeOtp) {
+      toast.error("Please enter the OTP");
       return;
     }
 
-    toast.success("OTP verified successfully");
+    setOtpVerifying(true);
+    try {
+      const realotp = otp?.result?.[0]?.otp;
+      if (realotp !== typeOtp) {
+        toast.error("OTP is invalid. Please check and try again.");
+        setErrors({
+          ...errors,
+          otp: "Invalid OTP",
+        });
+        setOtpVerifying(false);
+        return;
+      }
+
+      toast.success("OTP verified successfully");
+      setIsOtpVerified(true);
+      setErrors({
+        ...errors,
+        otp: "",
+      });
+    } catch (error) {
+      console.error("OTP verification failed:", error);
+      toast.error("OTP verification failed. Please try again.");
+    }
+    setOtpVerifying(false);
   };
 
   const handletosendemail = async () => {
+    if (!formData.email) {
+      toast.error("Please enter your email address first");
+      setErrors({
+        ...errors,
+        email: "Email is required to send OTP",
+      });
+      return;
+    }
+    const emailPattern = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+    if (!emailPattern.test(formData.email)) {
+      toast.error("Please enter a valid email address");
+      setErrors({
+        ...errors,
+        email: "Invalid email format",
+      });
+      return;
+    }
+
+    setOtpLoading(true);
     // Get stored OTP attempts from localStorage
     const otpAttempts1 = localStorage.getItem("otpAttempts");
 
@@ -242,6 +300,7 @@ const Signup = ({ setIsLogin }: any) => {
         general: "Failed to send OTP. Please try again.",
       });
     }
+    setOtpLoading(false);
   };
   const login = useGoogleLogin({
     onSuccess: (tokenResponse) => {
@@ -325,63 +384,8 @@ const Signup = ({ setIsLogin }: any) => {
   return (
     <main className="flex pt-[20vh] w-full items-center justify-center pr-[5vw]">
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-            <circle
-              fill="#FF156D"
-              stroke="#FF156D"
-              strokeWidth="15"
-              r="15"
-              cx="40"
-              cy="65"
-            >
-              <animate
-                attributeName="cy"
-                calcMode="spline"
-                dur="2"
-                values="65;135;65;"
-                keySplines=".5 0 .5 1;.5 0 .5 1"
-                repeatCount="indefinite"
-                begin="-.4"
-              ></animate>
-            </circle>
-            <circle
-              fill="#FF156D"
-              stroke="#FF156D"
-              strokeWidth="15"
-              r="15"
-              cx="100"
-              cy="65"
-            >
-              <animate
-                attributeName="cy"
-                calcMode="spline"
-                dur="2"
-                values="65;135;65;"
-                keySplines=".5 0 .5 1;.5 0 .5 1"
-                repeatCount="indefinite"
-                begin="-.2"
-              ></animate>
-            </circle>
-            <circle
-              fill="#FF156D"
-              stroke="#FF156D"
-              strokeWidth="15"
-              r="15"
-              cx="160"
-              cy="65"
-            >
-              <animate
-                attributeName="cy"
-                calcMode="spline"
-                dur="2"
-                values="65;135;65;"
-                keySplines=".5 0 .5 1;.5 0 .5 1"
-                repeatCount="indefinite"
-                begin="0"
-              ></animate>
-            </circle>
-          </svg>
+        <div>
+          <Loader2 className="h-5 w-5 animate-spin mr-2" />
         </div>
       )}
       <div className="w-[100%]">
@@ -444,8 +448,13 @@ const Signup = ({ setIsLogin }: any) => {
                                   <button
                                     onClick={handletosendemail}
                                     className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1 w-max rounded-lg border text-xs font-semibold bg-gray-100 hover:bg-black hover:text-white"
+                                    disabled={otpLoading}
                                   >
-                                    send otp
+                                    {otpLoading ? (
+                                      <Loader2 className="h-3 w-3 animate-spin" />
+                                    ) : (
+                                      "send otp"
+                                    )}
                                   </button>
                                 </div>
                               </div>
@@ -465,7 +474,13 @@ const Signup = ({ setIsLogin }: any) => {
                             <Button
                               variant={"default"}
                               onClick={handletootpverify}
+                              disabled={otpVerifying}
                             >
+                              {otpVerifying ? (
+                                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                              ) : (
+                                ""
+                              )}
                               submit
                             </Button>
                           </div>
@@ -501,8 +516,14 @@ const Signup = ({ setIsLogin }: any) => {
                 ))}
                 <button
                   type="submit"
-                  className="w-full bg-blue-500 text-white p-2 rounded-md"
+                  className="w-full bg-blue-500 text-white p-2 rounded-md flex justify-center items-center"
+                  disabled={loading}
                 >
+                  {loading ? (
+                    <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                  ) : (
+                    ""
+                  )}
                   Register
                 </button>
               </form>
