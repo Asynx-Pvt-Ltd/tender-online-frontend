@@ -180,11 +180,6 @@ const menuItems: MenuItem[] = [
     ),
     link: "/profile/saved-tenders",
   },
-  {
-    label: "Change Password",
-    icon: <KeyRound />,
-    link: "/profile/change-password",
-  },
 ];
 
 const Sidebar: React.FC = () => {
