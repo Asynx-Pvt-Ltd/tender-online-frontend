@@ -69,7 +69,6 @@ const Page = () => {
     </div>
   );
 };
-
 export default Page;
 
 interface ProfileData {

@@ -159,7 +159,7 @@ const LoginForm = ({ setIsLogin, setLoading, loading }: any) => {
   }
 
   return (
-    <div className="lg:pt-[20vh] w-[95%] lg:pr-[5vw] h-fit flex items-center justify-center relative pt-[10vh]">
+    <div className="lg:pt-[20vh] w-[95%] lg:pr-[5vw] h-fit flex items-center justify-center relative pt-[10vh] mt-5 md:mt-0 lg:mt-0">
       <div className="bg-white border w-full border-gray-200 rounded-3xl shadow-lg dark:bg-neutral-900 dark:border-neutral-700">
         <div className="p-4 sm:p-12">
           <div className="text-center">
