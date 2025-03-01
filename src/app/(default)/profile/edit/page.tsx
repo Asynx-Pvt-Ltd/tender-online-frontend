@@ -54,7 +54,7 @@ const Page = () => {
       <ProfileEditForm initialData={initialData} onSubmit={handleFormSubmit} />
       {data.isGoogleAuth === true ? (
         <div>
-          <div className="p-6 lg:my-4 bg-white border h-fit w-full rounded-3xl">
+          <div className="p-6 lg:my-4 bg-white border h-fit w-full rounded-3xl mt-5">
             <h2 className="text-2xl font-bold text-gray-700 mb-6">
               Change Password
             </h2>
