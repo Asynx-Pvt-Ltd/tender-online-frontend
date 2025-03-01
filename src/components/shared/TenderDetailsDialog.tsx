@@ -76,7 +76,7 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
       open={!!selectedRowData}
       onOpenChange={() => setSelectedRowData(null)}
     >
-      <DialogContent className="max-w-[90%] lg:max-h-screen rounded-xl lg:max-w-4xl md:max-w-3xl md:pt-8 lg:rounded-3xl text-white bg-white">
+      <DialogContent className="max-w-[90%] lg:max-h-[90%] rounded-xl lg:max-w-3xl md:max-w-3xl md:pt-8 lg:rounded-3xl text-white bg-white">
         <button
           onClick={() => setSelectedRowData(null)}
           className="absolute lg:top-2 lg:left-0 lg:pl-3 lg:pt-2 md:top-2 md:pl-1 top-1 left-0.5 pt-1"
@@ -172,7 +172,7 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
               </div>
             </div>
           </div>
-          <div className="flex justify-between mt-3">
+          <div className="flex justify-between">
             <div className="flex text-black justify-center items-center gap-2 py-2">
               <MapPin size={23} color="black" />
               <p className="lg:text-sm text-[10px]">
@@ -218,7 +218,7 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
             </div>
           </div>
           <div className="bg-[#EDEDED]  border-[#EDEDED] border flex items-center gap-4 justify-between px-1 lg:px-24 py-3 rounded-3xl w-full">
-            <div className="flex text-black items-center justify-center py-2 w-full">
+            <div className="flex text-black items-center justify-center w-full">
               <div className="lg:px-4 px-1 border-r border-gray-400 w-full text-center py-1 lg:py-3 space-y-2">
                 <h1 className="text-[#4B4B4B] font-semibold text-xs lg:text-xl">
                   EMD Amount
@@ -237,7 +237,7 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col justify-center pt-4 items-center w-full">
+          <div className="flex flex-col justify-center pt-2 items-center w-full">
             <Button
               onClick={() => handleToSendTender(selectedRowData)}
               disabled={setButtonStatus(selectedRowData?.bidSubmissionDate)}
