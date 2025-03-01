@@ -159,26 +159,20 @@ const LoginForm = ({ setIsLogin, setLoading, loading }: any) => {
   }
 
   return (
-    <div className="lg:pt-[20vh] w-[95%] lg:pr-[5vw] h-fit flex items-center justify-center relative pt-[10vh] mt-5 md:mt-0 lg:mt-0">
-      <div className="bg-white border w-full border-gray-200 rounded-3xl shadow-lg dark:bg-neutral-900 dark:border-neutral-700">
-        <div className="p-4 sm:p-12">
+    <div className="min-h-[70vh] w-full flex items-center justify-center px-4 sm:px-6 lg:px-8 specific-devices-position">
+      <div className="w-full max-w-md bg-white border border-gray-200 rounded-3xl shadow-lg dark:bg-neutral-900 dark:border-neutral-700">
+        <div className="p-6 sm:p-8 md:p-10">
           <div className="text-center">
-            <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
               Sign in
             </h1>
           </div>
-          <div className="mt-5">
+          <div className="mt-4 sm:mt-5">
             {/* Form */}
             <form onSubmit={handleSubmit}>
               <div className="grid gap-y-4">
                 {/* Form Group */}
                 <div>
-                  {/* <label
-                    htmlFor="email"
-                    className="block font-semibold text-sm mb-2 dark:text-white"
-                  >
-                    Email address
-                  </label> */}
                   <div className="relative">
                     <input
                       type="email"
@@ -202,14 +196,6 @@ const LoginForm = ({ setIsLogin, setLoading, loading }: any) => {
                 {/* End Form Group */}
                 {/* Form Group */}
                 <div>
-                  <div className="flex justify-between items-center">
-                    {/* <label
-                      htmlFor="password"
-                      className="block text-sm font-semibold mb-2 dark:text-white"
-                    >
-                      Password
-                    </label> */}
-                  </div>
                   <div className="relative">
                     <input
                       type="password"
@@ -247,7 +233,7 @@ const LoginForm = ({ setIsLogin, setLoading, loading }: any) => {
                   <p className="text-xs text-red-600 mt-2">{errors.general}</p>
                 )}
               </div>
-              <div className="flex mt-4 items-center justify-center">
+              <div className="mt-4">
                 <button
                   type="submit"
                   className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
@@ -256,7 +242,7 @@ const LoginForm = ({ setIsLogin, setLoading, loading }: any) => {
                 </button>
               </div>
             </form>
-            <div className="py-3 mt-0 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600">
+            <div className="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600">
               Or
             </div>
             <button
@@ -264,7 +250,7 @@ const LoginForm = ({ setIsLogin, setLoading, loading }: any) => {
                 setLoading(true);
                 login();
               }}
-              className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  border-gray-200 bg-gray-100/50 text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+              className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-gray-100/50 text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
             >
               <svg
                 className="w-4 h-auto"
@@ -292,7 +278,7 @@ const LoginForm = ({ setIsLogin, setLoading, loading }: any) => {
               </svg>
               Sign in with Google
             </button>
-            <p className="mt-2 text-center text-sm text-gray-600 dark:text-neutral-400">
+            <p className="mt-4 text-center text-sm text-gray-600 dark:text-neutral-400">
               Don't have an account?{" "}
               <button
                 className="text-blue-600 decoration-2 hover:underline font-medium dark:text-blue-500"
@@ -305,14 +291,6 @@ const LoginForm = ({ setIsLogin, setLoading, loading }: any) => {
           </div>
         </div>
       </div>
-      {/* <div className="flex gap-2 text-xs items-end absolute bottom-20 right-5 mt-auto w-full justify-end">
-        Follow us
-        <div className="flex items-center gap-2">
-          <img src="/twitter.png" alt="" className="w-6 h-6" />
-          <img src="/linkedin.png" alt="" className="w-6 h-6" />
-          <img src="/facebook.png" alt="" className="w-6 h-6" />
-        </div>
-      </div> */}
     </div>
   );
 };

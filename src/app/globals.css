@@ -44,3 +44,19 @@ body {
     background-size: 100% 100%, 100% 100%;
   }
 }
+
+@media (min-width: 360px) and (max-width: 390px) {
+  .specific-devices-position {
+    min-height: 80vh;
+    position: relative;
+    top: 4vh;
+  }
+}
+
+@media (width: 360px) and (height: 740px) {
+  .specific-devices-position {
+    min-height: 100vh;
+    position: relative;
+    top: 5vh;
+  }
+}
