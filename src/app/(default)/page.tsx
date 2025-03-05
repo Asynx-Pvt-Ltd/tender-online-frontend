@@ -222,7 +222,7 @@ export default function Home() {
 
       <Header isLogin1={isLogin} setIsLogin1={setIsLogin} />
       {!isLoggedIn ? (
-        <div className="flex lg:flex-row flex-col lg:gap-0 gap-16 h-fit specific-devices-position">
+        <div className="flex lg:flex-row flex-col lg:gap-0 gap-16 h-fit specific-devices-position bg-[#F5F8FF]">
           {/* Left Pane */}
           <div className="lg:flex relative w-full h-fit items-start mt-[7vh] lg:mt-[17vh] justify-center flex-1 text-black">
             <div className=" text-center  w-full relative">
@@ -415,7 +415,7 @@ export default function Home() {
             </div>
           </div>
           {!isLoggedIn && (
-            <div className="w-full lg:w-[35%] flex items-start lg:items-center justify-center lg:justify-center lg:mt-0 pt-[45vh] lg:pt-0">
+            <div className="w-full lg:w-[35%] flex items-start lg:items-center justify-center lg:justify-center lg:mt-0 pt-[45vh] lg:pt-0 ">
               {isLogin ? (
                 <LoginForm
                   setLoading={setLoading}
