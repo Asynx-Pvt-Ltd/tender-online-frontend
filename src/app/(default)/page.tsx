@@ -222,7 +222,7 @@ export default function Home() {
 
       <Header isLogin1={isLogin} setIsLogin1={setIsLogin} />
       {!isLoggedIn ? (
-        <div className="flex lg:flex-row flex-col lg:gap-0 gap-16 h-fit">
+        <div className="flex lg:flex-row flex-col lg:gap-0 gap-16 h-fit specific-devices-position">
           {/* Left Pane */}
           <div className="lg:flex relative w-full h-fit items-start mt-[7vh] lg:mt-[17vh] justify-center flex-1 text-black">
             <div className=" text-center  w-full relative">

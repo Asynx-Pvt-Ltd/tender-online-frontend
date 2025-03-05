@@ -60,3 +60,13 @@ body {
     top: 5vh;
   }
 }
+@media (width: 1192px) and (height: 539px) {
+  .specific-devices-position-login {
+    min-height: 100vh;
+    position: relative;
+  }
+  .specific-devices-position {
+    height: 130vh;
+    background-color: rgb(245, 248, 255);
+  }
+}
