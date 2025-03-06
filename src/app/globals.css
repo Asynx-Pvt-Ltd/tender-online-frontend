@@ -78,7 +78,7 @@ body {
   }
 }
 
-@media (min-width: 1192px) and (max-height: 539px) {
+@media (min-width: 1192px) and (max-height: 730px) {
   .dialog-main {
     max-width: 60vw;
     max-height: 90vh;
