@@ -82,5 +82,6 @@ body {
   .dialog-main {
     max-width: 60vw;
     max-height: 90vh;
+    overflow-y: scroll;
   }
 }
