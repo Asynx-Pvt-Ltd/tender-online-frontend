@@ -76,7 +76,7 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
       open={!!selectedRowData}
       onOpenChange={() => setSelectedRowData(null)}
     >
-      <DialogContent className="max-w-3xl !rounded-3xl bg-white text-white dialog-main">
+      <DialogContent className="max-w-3xl !rounded-3xl bg-white text-white">
         <div className="px-0 py-2 lg:px-4 ">
           <div className="rounded-3xl bg-[#000000] px-2 py-4 lg:px-4">
             <div className="flex w-full flex-wrap items-center justify-between lg:flex-row">

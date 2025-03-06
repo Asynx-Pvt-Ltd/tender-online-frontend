@@ -77,11 +77,3 @@ body {
     position: relative;
   }
 }
-
-@media (min-width: 1192px) and (max-height: 730px) {
-  .dialog-main {
-    max-width: 60vw;
-    max-height: 90vh;
-    overflow-y: scroll;
-  }
-}
