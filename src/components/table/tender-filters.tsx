@@ -11,6 +11,7 @@ import { MultiSelect } from "@mantine/core";
 import { Bookmark, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DatePickerWithRange } from "../shared/multi-select-demo";
+import TenderValueSlider from "@/components/shared/tender-value-slider";
 
 interface TenderFiltersProps {
   selectedDistricts: string[];
@@ -148,16 +149,15 @@ export default function TenderFilters({
     );
   };
 
-  const dropdownLabels = [
-    "District",
-    "Tender Value",
-    "Industry",
-    "Classification",
-  ];
+  const dropdownLabels = ["District", "Industry", "Classification"];
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2 flex-wrap lg:flex-nowrap">
         {dropdownLabels.map((label) => renderMultiSelect(label))}
+        <TenderValueSlider
+          selectedTenderValues={selectedTenderValues}
+          setSelectedTenderValues={setSelectedTenderValues}
+        />
         <Button
           variant={showClosedTenders ? "default" : "outline"}
           onClick={() => setShowClosedTenders(!showClosedTenders)}
@@ -235,23 +235,25 @@ export const FilterLabels = ({
         />
       )}
       {selectedTenderValues?.map((value: string) => {
-        console.log("Current Value:", value);
-        const tender = dropdownData["Tender Value"].find(
-          (item: any) => item.value === value
-        );
+        const valueLabels = {
+          "1": "Less than ₹10L",
+          "2": "₹10L - ₹1Cr",
+          "3": "₹1Cr - ₹100Cr",
+          "4": "₹100Cr - ₹500Cr",
+          "null": "Refer the document",
+        };
+
         return (
-          tender && (
-            <FilterTag
-              key={value}
-              label={tender.label}
-              type="tender value"
-              onRemove={() => {
-                setSelectedTenderValues(
-                  selectedTenderValues.filter((v) => v !== value)
-                );
-              }}
-            />
-          )
+          <FilterTag
+            key={value}
+            label={valueLabels[value as keyof typeof valueLabels] || value}
+            type="tender value"
+            onRemove={() => {
+              setSelectedTenderValues(
+                selectedTenderValues.filter((v) => v !== value)
+              );
+            }}
+          />
         );
       })}
       {industry?.map((ind: string) => (

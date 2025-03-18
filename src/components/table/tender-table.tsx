@@ -156,9 +156,13 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
       }
 
       if (selectedTenderValues.length > 0) {
-        selectedTenderValues.forEach((value: string) =>
-          params.append("tenderValue", value)
-        );
+        selectedTenderValues.forEach((value: string) => {
+          if (value === "null") {
+            params.append("tenderValueNull", "true");
+          } else {
+            params.append("tenderValue", value);
+          }
+        });
       }
       if (showClosedTenders) {
         params.append("showClosed", "true");
