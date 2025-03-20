@@ -10,7 +10,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
-      - name: setup node
+      - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -18,6 +18,15 @@ jobs:
 
       - name: Dependency Install
         run: yarn install --frozen-lockfile
+
+      - name: Create .env.production file
+        run: |
+          echo "NEXT_PUBLIC_Google_Oauth_ClientID=${{ secrets.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENTID }}" >> .env.production
+          echo "NEXT_PUBLIC_API_ENPOINT=${{ secrets.NEXT_PUBLIC_API_ENDPOINT }}" >> .env.production
+          echo "NEXT_PUBLIC_RAZOR_API_KEY=${{ secrets.NEXT_PUBLIC_RAZOR_API_KEY }}" >> .env.production
+          echo "NEXT_PUBLIC_RAZOR_PLAN_ID_1=${{ secrets.NEXT_PUBLIC_RAZOR_PLAN_ID_1 }}" >> .env.production
+          echo "NEXT_PUBLIC_RAZOR_PLAN_ID_2=${{ secrets.NEXT_PUBLIC_RAZOR_PLAN_ID_2 }}" >> .env.production
+          echo "NEXT_PUBLIC_RAZOR_PLAN_ID_3=${{ secrets.NEXT_PUBLIC_RAZOR_PLAN_ID_3 }}" >> .env.production
 
       - name: Build
         run: yarn build
