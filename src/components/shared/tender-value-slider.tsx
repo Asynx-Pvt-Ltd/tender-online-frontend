@@ -7,10 +7,13 @@ import {
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
+import { TenderValueEnum } from '@/enums';
 
 interface TenderValueSliderProps {
-	selectedTenderValues: [number, number] | [];
-	setSelectedTenderValues: (values: [number, number]) => void;
+	selectedTenderValues: [number, number] | TenderValueEnum.REFERTHEDOCUMENT;
+	setSelectedTenderValues: (
+		values: [number, number] | TenderValueEnum.REFERTHEDOCUMENT,
+	) => void;
 }
 
 const TenderValueSlider = ({
@@ -26,13 +29,17 @@ const TenderValueSlider = ({
 
 	// Initialize state with selected values or defaults
 	const [sliderRange, setSliderRange] = useState<[number, number]>(
-		selectedTenderValues.length === 2 ? selectedTenderValues : defaultRange,
+		Array.isArray(selectedTenderValues) && selectedTenderValues?.length === 2
+			? selectedTenderValues
+			: defaultRange,
 	);
 
 	// Update slider when selected values change externally
 	useEffect(() => {
-		if (selectedTenderValues.length === 2) {
-			setSliderRange(selectedTenderValues);
+		if (selectedTenderValues?.length === 2) {
+			if (Array.isArray(selectedTenderValues)) {
+				setSliderRange(selectedTenderValues);
+			}
 		}
 	}, [selectedTenderValues]);
 
@@ -68,7 +75,8 @@ const TenderValueSlider = ({
 
 	// Calculate if any filter is active
 	const isFilterActive =
-		selectedTenderValues.length === 2 &&
+		selectedTenderValues?.length === 2 &&
+		Array.isArray(selectedTenderValues) &&
 		(selectedTenderValues[0] > MIN_VALUE ||
 			selectedTenderValues[1] < MAX_VALUE);
 
@@ -137,7 +145,25 @@ const TenderValueSlider = ({
 							className="absolute inset-0 opacity-0 z-30 cursor-pointer"
 						/>
 					</div>
-
+					<div className="text-center">
+						<Button
+							variant={
+								selectedTenderValues === TenderValueEnum.REFERTHEDOCUMENT
+									? 'default'
+									: 'outline'
+							}
+							size={'sm'}
+							onClick={() =>
+								setSelectedTenderValues(
+									selectedTenderValues === TenderValueEnum.REFERTHEDOCUMENT
+										? [MIN_VALUE, MAX_VALUE]
+										: TenderValueEnum.REFERTHEDOCUMENT,
+								)
+							}
+						>
+							Refer the Document
+						</Button>
+					</div>
 					<div className="flex justify-between text-xs text-gray-500 mt-1">
 						<span>₹0</span>
 						<span>₹500Cr</span>

@@ -12,10 +12,11 @@ import { Bookmark, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { DatePickerWithRange } from '../shared/multi-select-demo';
 import TenderValueSlider from '@/components/shared/tender-value-slider';
+import { TenderValueEnum } from '@/enums';
 
 interface TenderFiltersProps {
 	selectedDistricts: string[];
-	selectedTenderValues: string[];
+	selectedTenderValues: any;
 	industry: string[];
 	classification: string[];
 	dateRange: any;
@@ -155,7 +156,7 @@ export default function TenderFilters({
 			<div className="flex items-center gap-2 flex-wrap lg:flex-nowrap">
 				{dropdownLabels.map((label) => renderMultiSelect(label))}
 				<TenderValueSlider
-					selectedTenderValues={selectedTenderValues as [number, number] | []}
+					selectedTenderValues={selectedTenderValues}
 					setSelectedTenderValues={setSelectedTenderValues}
 				/>
 				<Button
@@ -194,8 +195,8 @@ export const FilterLabels = ({
 }: TenderFiltersProps) => {
 	return (
 		<div className="flex flex-wrap gap-2 ml-2 mt-2">
-			{(selectedDistricts.length > 0 ||
-				selectedTenderValues.length > 0 ||
+			{(selectedDistricts?.length > 0 ||
+				selectedTenderValues ||
 				dateRange ||
 				industry.length > 0 ||
 				classification) && (
@@ -234,28 +235,33 @@ export const FilterLabels = ({
 					onRemove={() => setDateRange(null)}
 				/>
 			)}
-			{selectedTenderValues?.map((value: string) => {
-				const valueLabels = {
-					'1': 'Less than ₹10L',
-					'2': '₹10L - ₹1Cr',
-					'3': '₹1Cr - ₹100Cr',
-					'4': '₹100Cr - ₹500Cr',
-					null: 'Refer the document',
-				};
-
-				return (
-					<FilterTag
-						key={value}
-						label={valueLabels[value as keyof typeof valueLabels] || value}
-						type="tender value"
-						onRemove={() => {
-							setSelectedTenderValues(
-								selectedTenderValues.filter((v) => v !== value),
-							);
-						}}
-					/>
-				);
-			})}
+			{selectedTenderValues && Array.isArray(selectedTenderValues) ? (
+				selectedTenderValues.map((value: string) => {
+					return (
+						<FilterTag
+							key={value}
+							label={value}
+							type="tender value"
+							onRemove={() => {
+								setSelectedTenderValues(
+									Array.isArray(selectedTenderValues)
+										? selectedTenderValues.filter((v) => v !== value)
+										: [],
+								);
+							}}
+						/>
+					);
+				})
+			) : (
+				<FilterTag
+					key={selectedTenderValues}
+					label={selectedTenderValues}
+					type="tender value"
+					onRemove={() => {
+						setSelectedTenderValues(selectedTenderValues);
+					}}
+				/>
+			)}
 			{industry?.map((ind: string) => (
 				<FilterTag
 					key={ind}

@@ -31,6 +31,7 @@ import { toast } from 'sonner';
 import { formatIndianRupeePrice, getTenderValueCategory } from '@/utils/utils';
 import { clear } from 'console';
 import SaveTenderButton from '../shared/saveButton';
+import { TenderValueEnum } from '@/enums';
 
 interface ViewedTenderData {
 	tenderIds: string[];
@@ -106,9 +107,9 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 		suggestionIndustry,
 		suggestionClassification,
 	} = useTenderFilters();
-	const [selectedTenderValues, setSelectedTenderValues] = React.useState<any>(
-		[],
-	);
+	const [selectedTenderValues, setSelectedTenderValues] = React.useState<
+		[] | TenderValueEnum.REFERTHEDOCUMENT
+	>([]);
 	const [page, setPage] = React.useState(0);
 	const [inputPage, setInputPage] = React.useState(1);
 
@@ -141,7 +142,9 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 			'tenders',
 			buildQueryParams().toString(),
 			page,
-			selectedTenderValues.join(','),
+			Array.isArray(selectedTenderValues)
+				? selectedTenderValues.join(',')
+				: selectedTenderValues,
 			sorting,
 			showClosedTenders,
 		],
@@ -155,14 +158,18 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 				params.append('sortOrder', sortDirection);
 			}
 
-			if (selectedTenderValues.length > 0) {
-				selectedTenderValues.forEach((value: string) => {
-					if (value === 'null') {
-						params.append('tenderValueNull', 'true');
-					} else {
-						params.append('tenderValue', value);
-					}
-				});
+			if (selectedTenderValues && selectedTenderValues.length > 0) {
+				if (Array.isArray(selectedTenderValues)) {
+					selectedTenderValues.forEach((value: number) => {
+						if (value === null) {
+							params.append('tenderValueNull', 'true');
+						} else {
+							params.append('tenderValue', value.toString());
+						}
+					});
+				} else {
+					params.append('tenderValue', selectedTenderValues);
+				}
 			}
 			if (showClosedTenders) {
 				params.append('showClosed', 'true');
