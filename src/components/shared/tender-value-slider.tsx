@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { TenderValueEnum } from '@/enums';
+import { Checkbox } from '../ui/checkbox';
 
 interface TenderValueSliderProps {
 	selectedTenderValues: [number, number] | TenderValueEnum.REFERTHEDOCUMENT;
@@ -145,24 +146,20 @@ const TenderValueSlider = ({
 							className="absolute inset-0 opacity-0 z-30 cursor-pointer"
 						/>
 					</div>
-					<div className="text-center">
-						<Button
-							variant={
+					<div className="flex items-center gap-2 justify-center">
+						Refer the Document{' '}
+						<Checkbox
+							checked={
 								selectedTenderValues === TenderValueEnum.REFERTHEDOCUMENT
-									? 'default'
-									: 'outline'
 							}
-							size={'sm'}
-							onClick={() =>
+							onCheckedChange={(checked) => {
 								setSelectedTenderValues(
-									selectedTenderValues === TenderValueEnum.REFERTHEDOCUMENT
-										? [MIN_VALUE, MAX_VALUE]
-										: TenderValueEnum.REFERTHEDOCUMENT,
-								)
-							}
-						>
-							Refer the Document
-						</Button>
+									checked
+										? TenderValueEnum.REFERTHEDOCUMENT
+										: [MIN_VALUE, MAX_VALUE],
+								);
+							}}
+						/>
 					</div>
 					<div className="flex justify-between text-xs text-gray-500 mt-1">
 						<span>₹0</span>
