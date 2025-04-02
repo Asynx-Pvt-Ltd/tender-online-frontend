@@ -41,13 +41,13 @@ const TenderHeader = ({ tenderLength }: { tenderLength: number | null }) => {
 			<div className="flex items-center gap-3 w-full">
 				<div className="lg:bg-[#171717] bg-white py-2 w-full  px-0 lg:px-4 flex items-center justify-between gap-6 rounded-full">
 					<div className="flex items-center gap-3">
-						<div className="px-4 lg:pl-0 hidden lg:block">
+						{/* <div className="px-4 lg:pl-0 hidden lg:block">
 							<SelectState />
-						</div>
+						</div> */}
 						<div className="block">
-							<h1 className="lg:text-white text-black text-center lg:text-base not-italic font-medium leading-[25px] text-[16px] lg:flex lg:gap-1 lg:ml-0 ml-5">
+							<h1 className="lg:text-white text-black text-center lg:text-base not-italic font-medium leading-[25px] text-[16px] lg:flex lg:gap-1 lg:ml-2 ml-5">
 								Showing {tenderLength != null ? tenderLength : <LoadingDots />}{' '}
-								Tenders{' '}
+								Tenders as on {new Date().toLocaleDateString('en-IN')}
 							</h1>
 						</div>
 					</div>
