@@ -50,9 +50,20 @@ const selectConfig: SelectConfig = {
 	],
 };
 
-export function SelectState() {
+export function SelectState({
+	setState,
+}: {
+	setState: (state: string[]) => void;
+}) {
+	const [selectedState, setSelectedState] = React.useState('tamil-nadu');
+
+	const handleStateChange = (value: string) => {
+		setSelectedState(value);
+		setState([value]);
+	};
+
 	return (
-		<Select value="tamil-nadu" defaultValue="tamil-nadu">
+		<Select value={selectedState} onValueChange={handleStateChange}>
 			<SelectTrigger className="w-32 gap-0.5 flex">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -80,19 +91,11 @@ export function SelectState() {
 			<SelectContent>
 				<SelectGroup>
 					<SelectLabel>{selectConfig.label}</SelectLabel>
-					{selectConfig.options.map((option) => {
-						const isTamilNadu = option.value === 'tamil-nadu'; // Check if the current option is Tamil Nadu
-
-						return (
-							<SelectItem
-								className={isTamilNadu ? 'stroke-current' : 'line-through'} // Apply strikethrough class for other states
-								key={option.value}
-								value={option.value}
-							>
-								{option.label}
-							</SelectItem>
-						);
-					})}
+					{selectConfig.options.map((option) => (
+						<SelectItem key={option.value} value={option.value}>
+							{option.label}
+						</SelectItem>
+					))}
 				</SelectGroup>
 			</SelectContent>
 		</Select>

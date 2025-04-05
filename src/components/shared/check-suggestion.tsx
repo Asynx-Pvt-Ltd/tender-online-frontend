@@ -5,6 +5,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Modal, MultiSelect } from '@mantine/core';
 import { industriesData } from '../hook/use-tender-filters';
+import { SelectState } from './selectState';
 
 export function CheckSuggestion() {
 	const [classification, setClassification] = useState([]);
@@ -108,15 +109,21 @@ export function CheckSuggestion() {
 		return (
 			<div className="w-full">
 				<div className="grid gap-4">
-					<MultiSelect
-						required
-						label={label}
-						placeholder={`Pick ${label}`}
-						data={uniqueOptions} // Use the filtered unique options
-						value={getSelectedValues(label)} // Ensure value is an array
-						onChange={(selected) => handleMultiSelectChange(label, selected)}
-						className="basic-multi-select"
-					/>
+					{label === 'State' ? (
+						<SelectState
+							setState={(value) => handleMultiSelectChange('State', value)}
+						/>
+					) : (
+						<MultiSelect
+							required
+							label={label}
+							placeholder={`Pick ${label}`}
+							data={uniqueOptions}
+							value={getSelectedValues(label)}
+							onChange={(selected) => handleMultiSelectChange(label, selected)}
+							className="basic-multi-select"
+						/>
+					)}
 				</div>
 			</div>
 		);

@@ -151,7 +151,7 @@ export default function TenderFilters({
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex items-center gap-2 flex-wrap lg:flex-nowrap">
-				<SelectState />
+				<SelectState setState={setSelectedDistricts} />
 				{dropdownLabels.map((label) => renderMultiSelect(label))}
 				<TenderValueSlider
 					selectedTenderValues={selectedTenderValues}
