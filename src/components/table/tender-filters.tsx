@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 import { DatePickerWithRange } from '../shared/multi-select-demo';
 import TenderValueSlider from '@/components/shared/tender-value-slider';
 import { TenderValueEnum } from '@/enums';
+import { SelectState } from '../shared/selectState';
 
 interface TenderFiltersProps {
 	selectedDistricts: string[];
@@ -99,10 +100,6 @@ export default function TenderFilters({
 			dropdownData[label]?.map((option: any) => ({
 				value: option.value,
 				label: option.label,
-				disabled:
-					label === 'Industry'
-						? option.label.toLowerCase() !== 'construction'
-						: false,
 			})) || [];
 
 		const uniqueOptions = removeDuplicates(options);
@@ -150,10 +147,11 @@ export default function TenderFilters({
 		);
 	};
 
-	const dropdownLabels = ['District', 'Industry', 'Classification'];
+	const dropdownLabels = ['Industry', 'Classification'];
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex items-center gap-2 flex-wrap lg:flex-nowrap">
+				<SelectState />
 				{dropdownLabels.map((label) => renderMultiSelect(label))}
 				<TenderValueSlider
 					selectedTenderValues={selectedTenderValues}
