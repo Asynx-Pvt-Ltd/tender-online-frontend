@@ -4090,16 +4090,16 @@ export function useTenderFilters() {
 	});
 
 	// Fetch industries
-	// const { data: industries, isLoading: isLoadingIndustries } = useQuery({
-	//   queryKey: ["industries"],
-	//   queryFn: async () => {
-	//     const response = await axios.get(
-	//       process.env.NEXT_PUBLIC_API_ENDPOINT + "/api/tender/industries"
-	//     );
-	//     setFilterIndustry(response.data.industries);
-	//     return response.data.industries;
-	//   },
-	// });
+	const { data: industries, isLoading: isLoadingIndustries } = useQuery({
+		queryKey: ['industries'],
+		queryFn: async () => {
+			const response = await axios.get(
+				process.env.NEXT_PUBLIC_API_ENDPOINT + '/api/tender/industries',
+			);
+			setFilterIndustry(response.data.industries);
+			return response.data.industries;
+		},
+	});
 
 	const { data: classifications, isLoading: isLoadingClassifications } =
 		useQuery({
