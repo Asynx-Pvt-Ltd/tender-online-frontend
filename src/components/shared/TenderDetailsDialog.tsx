@@ -394,7 +394,7 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
 						</div>
 					</div>
 					<div className="flex justify-between">
-						<div className="flex items-center justify-center gap-2 border-b py-4 text-black">
+						<div className="flex items-center justify-center gap-2 py-4 text-black">
 							<svg
 								width="20"
 								height="20"
@@ -411,7 +411,7 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
 								{selectedRowData?.location}
 							</p>
 						</div>
-						<div className="flex items-center justify-center gap-2 border-b py-4 text-black">
+						<div className="flex items-center justify-center gap-2 py-4 text-black">
 							<Image
 								src="/district.png"
 								width={28}
@@ -423,6 +423,7 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
 							</p>
 						</div>
 					</div>
+					<div className="w-full border-t border-gray-400 opacity-25" />
 					<div className="flex w-full items-center justify-center py-2 text-black">
 						<div className="w-full space-y-2 border-r px-1 py-1 text-center lg:px-4 lg:py-3">
 							<p className="text-[8px] font-medium lg:text-xs">
