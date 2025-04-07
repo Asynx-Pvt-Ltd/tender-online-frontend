@@ -11,7 +11,8 @@ export function CheckSuggestion() {
 	const [classification, setClassification] = useState([]);
 	const [industry, setIndustry] = useState([]);
 	const [filterClassification, setFilterClassification] = useState<any>([]);
-	const [state, setState] = useState(['tamil-nadu']);
+	const [state, setState] = useState<string[]>([]);
+	const [filterState, setFilterState] = useState<any>([]);
 	const [filterIndustry, setFilterIndustry] = useState(
 		industriesData.map((ind) => ({ value: ind.value, label: ind.label })),
 	);
@@ -24,7 +25,20 @@ export function CheckSuggestion() {
 			setFilterClassification(response.data.classifications);
 			return response.data.classifications;
 		};
+		const fetchStates = async () => {
+			try {
+				const response = await axios.get(
+					process.env.NEXT_PUBLIC_API_ENDPOINT + '/api/tender/states',
+				);
+				setFilterState(response.data.states);
+				return response.data.states;
+			} catch (error) {
+				console.error('Error fetching states:', error);
+				return [];
+			}
+		};
 		fetchClass();
+		fetchStates();
 	}, []);
 	// Fetch suggestions to check if the user has already added them
 	const fetchSuggestions = async () => {
@@ -47,7 +61,10 @@ export function CheckSuggestion() {
 
 	const dropdownData: any = {
 		Industry: filterIndustry,
-		State: [{ value: 'tamil-nadu', label: 'Tamil Nadu' }],
+		State:
+			filterState.length > 0
+				? filterState
+				: [{ value: 'tamil-nadu', label: 'Tamil Nadu' }],
 		Classification: filterClassification,
 	};
 

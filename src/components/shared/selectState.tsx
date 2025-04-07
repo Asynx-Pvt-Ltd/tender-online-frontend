@@ -55,11 +55,45 @@ export function SelectState({
 }: {
 	setState: (state: string[]) => void;
 }) {
-	const [selectedState, setSelectedState] = React.useState('tamil-nadu');
+	const [selectedState, setSelectedState] = React.useState('');
+	const [stateOptions, setStateOptions] = React.useState<
+		Array<{ value: string; label: string }>
+	>([]);
+
+	React.useEffect(() => {
+		// Fetch states when component mounts
+		const fetchStates = async () => {
+			try {
+				const response = await fetch(
+					`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/tender/states`,
+				);
+				const data = await response.json();
+				if (data.states && Array.isArray(data.states)) {
+					setStateOptions(data.states);
+				}
+			} catch (error) {
+				console.error('Error fetching states:', error);
+			}
+		};
+
+		fetchStates();
+	}, []);
 
 	const handleStateChange = (value: string) => {
 		setSelectedState(value);
-		setState([value]);
+
+		// Check if the state name should be converted to match what backend expects
+		// Get the full state name from options
+		const selectedStateOption = stateOptions.find(
+			(option) => option.value === value,
+		);
+
+		if (selectedStateOption) {
+			// Use the exact state name as it appears in your database
+			setState([selectedStateOption.label]);
+		} else {
+			setState([value]); // Fallback
+		}
 	};
 
 	return (
@@ -84,14 +118,12 @@ export function SelectState({
 						</clipPath>
 					</defs>
 				</svg>
-				<SelectValue
-					placeholder={`Select a ${selectConfig.label.toLowerCase()}`}
-				/>
+				<SelectValue placeholder="Select state" />
 			</SelectTrigger>
 			<SelectContent>
 				<SelectGroup>
-					<SelectLabel>{selectConfig.label}</SelectLabel>
-					{selectConfig.options.map((option) => (
+					<SelectLabel>States</SelectLabel>
+					{stateOptions.map((option) => (
 						<SelectItem key={option.value} value={option.value}>
 							{option.label}
 						</SelectItem>

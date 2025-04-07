@@ -146,12 +146,24 @@ export default function TenderFilters({
 			</div>
 		);
 	};
+	const handleStateSelection = (states: string[]) => {
+		console.log('Selected state:', states);
 
+		// Make sure we're using the correct property names in your backend
+		// You might need to adjust this based on what your API expects
+		setSelectedDistricts(
+			states.map((state) => {
+				// If your backend expects exact case matching
+				// You might need to convert state names to match exactly what your backend has
+				return state;
+			}),
+		);
+	};
 	const dropdownLabels = ['Industry', 'Classification'];
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex items-center gap-2 flex-wrap lg:flex-nowrap">
-				<SelectState setState={setSelectedDistricts} />
+				<SelectState setState={handleStateSelection} />
 				{dropdownLabels.map((label) => renderMultiSelect(label))}
 				<TenderValueSlider
 					selectedTenderValues={selectedTenderValues}
@@ -216,7 +228,7 @@ export const FilterLabels = ({
 				<FilterTag
 					key={district}
 					label={district}
-					type="district"
+					type="State"
 					onRemove={() => {
 						setSelectedDistricts(
 							selectedDistricts.filter((d) => d !== district),
