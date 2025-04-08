@@ -4177,6 +4177,7 @@ export function useTenderFilters() {
 		classification,
 		searchList,
 		dateRange,
+		states,
 	]);
 
 	return {

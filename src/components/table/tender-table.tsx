@@ -201,6 +201,7 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 		setDateRange(null);
 		setSearchList([]);
 		setShowClosedTenders(false);
+		setStates([]);
 		refetch();
 	}, [refetch]);
 
