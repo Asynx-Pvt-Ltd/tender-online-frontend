@@ -4069,6 +4069,21 @@ export function useTenderFilters() {
 		industriesData.flatMap((ind) => ind.subIndustries),
 	);
 
+	// States state variables (similar to industry)
+	const [states, setStates] = useState<string[]>([]); // Selected states
+	const [filterStates, setFilterStates] = useState<any>([]); // All available states from API
+
+	const data = useQuery({
+		queryKey: ['states'],
+		queryFn: async () => {
+			const response = await axios.get(
+				process.env.NEXT_PUBLIC_API_ENDPOINT + '/api/tender/states',
+			);
+			setFilterStates(response.data.states); // Store all states in filterStates
+			return response.data.states;
+		},
+	});
+
 	// Fetch suggestions
 	const { data: suggestions } = useQuery({
 		queryKey: ['suggestions'],
@@ -4143,6 +4158,7 @@ export function useTenderFilters() {
 		appendMultiSelect('tenderValue', selectedTenderValues);
 		appendMultiSelect('industry', industry);
 		appendMultiSelect('classification', classification ? [classification] : []);
+		appendMultiSelect('states', states);
 
 		if (searchList.length) {
 			queryParams.append('search', searchList.join(','));
@@ -4188,5 +4204,9 @@ export function useTenderFilters() {
 		setFilterClassification,
 		filterClassification,
 		isLoadingClassifications,
+		states,
+		setStates,
+		filterStates,
+		setFilterStates,
 	};
 }

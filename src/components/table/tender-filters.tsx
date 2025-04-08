@@ -12,8 +12,6 @@ import { Bookmark, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { DatePickerWithRange } from '../shared/multi-select-demo';
 import TenderValueSlider from '@/components/shared/tender-value-slider';
-import { TenderValueEnum } from '@/enums';
-import { SelectState } from '../shared/selectState';
 
 interface TenderFiltersProps {
 	selectedDistricts: string[];
@@ -31,6 +29,8 @@ interface TenderFiltersProps {
 	foryou: boolean;
 	showClosedTenders: boolean;
 	setShowClosedTenders: (show: boolean) => void;
+	states: any;
+	setStates: (states: any) => void;
 }
 type DistrictMapping = {
 	[key: string]: string[];
@@ -62,9 +62,14 @@ export default function TenderFilters({
 	foryou,
 	showClosedTenders,
 	setShowClosedTenders,
+	setStates,
+	states,
 }: TenderFiltersProps) {
 	const handleMultiSelectChange = (label: string, value: any) => {
 		switch (label) {
+			case 'States':
+				setStates(value);
+				break;
 			case 'District':
 				const newDistricts = value.flatMap((district: string) => {
 					return districtMapping[district] || [district];
@@ -106,6 +111,8 @@ export default function TenderFilters({
 
 		const getSelectedValues = (label: string) => {
 			switch (label) {
+				case 'States':
+					return Array.isArray(states) ? states : [];
 				case 'District':
 					return Array.isArray(selectedDistricts) ? selectedDistricts : [];
 				case 'Tender Value':
@@ -147,11 +154,10 @@ export default function TenderFilters({
 		);
 	};
 
-	const dropdownLabels = ['Industry', 'Classification'];
+	const dropdownLabels = ['States', 'Industry', 'Classification'];
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex items-center gap-2 flex-wrap lg:flex-nowrap">
-				<SelectState />
 				{dropdownLabels.map((label) => renderMultiSelect(label))}
 				<TenderValueSlider
 					selectedTenderValues={selectedTenderValues}
@@ -190,9 +196,21 @@ export const FilterLabels = ({
 	foryou,
 	showClosedTenders,
 	setShowClosedTenders,
+	states,
+	setStates,
 }: TenderFiltersProps) => {
 	return (
 		<div className="flex flex-wrap gap-2 ml-2 mt-2">
+			{states?.map((state: string) => (
+				<FilterTag
+					key={state}
+					label={state}
+					type="state"
+					onRemove={() => {
+						setStates(states.filter((s: any) => s !== state));
+					}}
+				/>
+			))}
 			{(selectedDistricts?.length > 0 ||
 				selectedTenderValues ||
 				dateRange ||

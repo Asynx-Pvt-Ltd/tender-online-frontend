@@ -106,6 +106,9 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 		setSearchList,
 		suggestionIndustry,
 		suggestionClassification,
+		states,
+		setStates,
+		filterStates,
 	} = useTenderFilters();
 	const [selectedTenderValues, setSelectedTenderValues] = React.useState<
 		[] | TenderValueEnum.REFERTHEDOCUMENT
@@ -369,6 +372,7 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 		Industry: filterIndustry,
 		SubIndustry: filterSubIndustry,
 		Classification: filterClassification,
+		States: filterStates,
 	};
 
 	return (
@@ -398,6 +402,8 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 						foryou={foryou}
 						showClosedTenders={showClosedTenders}
 						setShowClosedTenders={setShowClosedTenders}
+						states={states}
+						setStates={setStates}
 					/>
 				</div>
 				<div className="flex items-start gap-2">
@@ -417,6 +423,8 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 						foryou={foryou}
 						showClosedTenders={showClosedTenders}
 						setShowClosedTenders={setShowClosedTenders}
+						states={states}
+						setStates={setStates}
 					/>
 					{isAnyRowSelected && (
 						<button
