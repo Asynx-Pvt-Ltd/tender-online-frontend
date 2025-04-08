@@ -111,7 +111,7 @@ export default function TenderFilters({
 
 		const getSelectedValues = (label: string) => {
 			switch (label) {
-				case 'State':
+				case 'States':
 					return Array.isArray(states) ? states : [];
 				case 'District':
 					return Array.isArray(selectedDistricts) ? selectedDistricts : [];
@@ -154,7 +154,7 @@ export default function TenderFilters({
 		);
 	};
 
-	const dropdownLabels = ['State', 'Industry', 'Classification'];
+	const dropdownLabels = ['States', 'Industry', 'Classification'];
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex items-center gap-2 flex-wrap lg:flex-nowrap">

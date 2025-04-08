@@ -373,7 +373,7 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 		Industry: filterIndustry,
 		SubIndustry: filterSubIndustry,
 		Classification: filterClassification,
-		State: filterStates,
+		States: filterStates,
 	};
 
 	return (
