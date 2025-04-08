@@ -201,16 +201,6 @@ export const FilterLabels = ({
 }: TenderFiltersProps) => {
 	return (
 		<div className="flex flex-wrap gap-2 ml-2 mt-2">
-			{states?.map((state: string) => (
-				<FilterTag
-					key={state}
-					label={state}
-					type="state"
-					onRemove={() => {
-						setStates(states.filter((s: any) => s !== state));
-					}}
-				/>
-			))}
 			{(selectedDistricts?.length > 0 ||
 				selectedTenderValues ||
 				dateRange ||
@@ -278,6 +268,17 @@ export const FilterLabels = ({
 					}}
 				/>
 			)}
+			{states?.map((state: string) => (
+				<FilterTag
+					key={state}
+					label={state}
+					type="state"
+					onRemove={() => {
+						setStates(states.filter((s: any) => s !== state));
+					}}
+				/>
+			))}
+
 			{industry?.map((ind: string) => (
 				<FilterTag
 					key={ind}
