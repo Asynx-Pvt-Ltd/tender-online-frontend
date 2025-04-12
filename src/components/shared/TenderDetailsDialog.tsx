@@ -38,6 +38,23 @@ export interface TenderDocument {
 	active?: boolean;
 }
 
+const getSourceFullName = (source: string): string => {
+	const sourceMap: Record<string, string> = {
+		TN_eproc: 'TamilNadu Tenders',
+		CPCL_CPPP: 'Chennai Petroleum Corporation Limited Tenders',
+		BHEL_CPPP: 'Bharat Heavy Electricals Limited Tenders',
+		CGPSE_CPPP: 'Central Public Sector Enterprises Tenders',
+		CG_CPPP: 'Central Government',
+		Def_CPPP: 'Ministry of Defence Tenders',
+		CIL_CPPP: 'Coal India Limited Tenders',
+		IOC_CPPP: 'Indian Oil Corporation Tenders',
+		BEL_CPPP: 'Bharat Electronics Limited Tenders',
+		NTPC_CPPP: 'National Thermal Power Corporation Tenders',
+	};
+
+	return sourceMap[source] || source;
+};
+
 const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
 	const handleToSendTender = async (rowData: any) => {
 		const response = await fetch(
@@ -377,7 +394,7 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
 									</h4>
 								</div>
 							</div>
-							<div className="flex items-center gap-1">
+							<div className="flex items-center gap-7 md:gap-2 lg:gap-2 justify-end lg:justify-end">
 								<div className="flex items-center">
 									<Image
 										src={'/globe.svg'}
@@ -387,8 +404,8 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
 									/>
 									<h3 className="">Source:</h3>
 								</div>
-								<h4 className="text-[10px] lg:text-sm ">
-									{selectedRowData?.source}
+								<h4 className="text-[10px] lg:text-[12px] pt-1">
+									{getSourceFullName(selectedRowData?.source || '')}
 								</h4>
 							</div>
 						</div>
