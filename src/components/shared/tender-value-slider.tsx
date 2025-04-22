@@ -190,13 +190,10 @@ const TenderValueSlider = ({
 						<Label className="text-xs font-medium text-gray-700">
 							Select Tender Value Range (₹0 - ₹500Cr)
 						</Label>
-
-						{/* Custom Slider with visible handles */}
+						{/* 
 						<div className="relative w-full h-6 mt-2">
-							{/* Background track */}
 							<div className="absolute top-1/2 transform -translate-y-1/2 w-full h-2 bg-gray-200 rounded-full"></div>
 
-							{/* Colored range bar */}
 							<div
 								className="absolute top-1/2 transform -translate-y-1/2 h-2 bg-black rounded-full"
 								style={{
@@ -207,7 +204,6 @@ const TenderValueSlider = ({
 								}}
 							></div>
 
-							{/* Left handle */}
 							<div
 								className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-white rounded-full border-2 border-black cursor-pointer shadow-md z-20"
 								style={{
@@ -215,7 +211,6 @@ const TenderValueSlider = ({
 								}}
 							></div>
 
-							{/* Right handle */}
 							<div
 								className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-white rounded-full border-2 border-black cursor-pointer shadow-md z-20"
 								style={{
@@ -223,7 +218,6 @@ const TenderValueSlider = ({
 								}}
 							></div>
 
-							{/* Actual slider (invisible but functional) */}
 							<Slider
 								value={[sliderRange[0], sliderRange[1]]}
 								min={MIN_VALUE}
@@ -233,12 +227,12 @@ const TenderValueSlider = ({
 								className="absolute inset-0 opacity-0 z-30 cursor-pointer"
 								disabled={referDocument}
 							/>
-						</div>
+						</div> */}
 
 						{/* Custom input fields for min and max values */}
 						<div className="flex items-center justify-between mt-4">
 							<div className="w-[45%]">
-								<Label className="text-xs font-medium text-gray-700 mb-1 block">
+								<Label className="text-xs font-medium text-gray-700 mb-2 block">
 									Min Value
 								</Label>
 								<div className="flex">
@@ -261,7 +255,7 @@ const TenderValueSlider = ({
 								</div>
 							</div>
 							<div className="w-[45%]">
-								<Label className="text-xs font-medium text-gray-700 mb-1 block">
+								<Label className="text-xs font-medium text-gray-700 mb-2 block">
 									Max Value
 								</Label>
 								<div className="flex">
