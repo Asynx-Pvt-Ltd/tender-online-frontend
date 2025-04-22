@@ -402,9 +402,8 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
 										height={20}
 										alt="source"
 									/>
-									<h3 className="">Source:</h3>
 								</div>
-								<h4 className="text-[10px] lg:text-[12px] pt-1">
+								<h4 className="text-[10px] lg:text-[12px]">
 									{getSourceFullName(selectedRowData?.source || '')}
 								</h4>
 							</div>
@@ -491,6 +490,7 @@ const TenderDetailsDialog = ({ selectedRowData, setSelectedRowData }: any) => {
 						<Button
 							onClick={() => handleToSendTender(selectedRowData)}
 							disabled={setButtonStatus(selectedRowData?.bidSubmissionDate)}
+							className="custom-search-border !outline-none border-transparent focus:border-transparent focus:ring-0 text-black"
 						>
 							Request For Documents
 						</Button>
