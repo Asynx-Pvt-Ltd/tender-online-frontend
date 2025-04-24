@@ -32,6 +32,7 @@ import { formatIndianRupeePrice, getTenderValueCategory } from '@/utils/utils';
 import { clear } from 'console';
 import SaveTenderButton from '../shared/saveButton';
 import { TenderValueEnum } from '@/enums';
+import ExactTenderIdSearch from './tenderID-search';
 
 interface ViewedTenderData {
 	tenderIds: string[];
@@ -56,7 +57,7 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 	// const EXPIRATION_TIME = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 	// const EXPIRATION_TIME = 5 * 1000;
 	const [showClosedTenders, setShowClosedTenders] = React.useState(false);
-
+	const [exactTenderId, setExactTenderId] = React.useState('');
 	React.useEffect(() => {
 		if (typeof window !== 'undefined') {
 			const params = new URLSearchParams(window.location.search);
@@ -154,6 +155,10 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 		queryFn: async () => {
 			const params = buildQueryParams();
 
+			if (exactTenderId) {
+				params.append('exactTenderId', exactTenderId);
+			}
+
 			if (sorting.length > 0) {
 				const sortColumn = sorting[0].id;
 				const sortDirection = sorting[0].desc ? 'desc' : 'asc';
@@ -192,7 +197,7 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 	});
 	React.useEffect(() => {
 		refetch();
-	}, [selectedTenderValues, showClosedTenders, refetch]);
+	}, [selectedTenderValues, showClosedTenders, exactTenderId, refetch]);
 	const clearFilters = useCallback(() => {
 		setSelectedDistricts([]);
 		setSelectedTenderValues([]);
@@ -378,34 +383,48 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 
 	return (
 		<div className="w-full border rounded-xl">
-			<div className="flex flex-col-reverse gap-6 lg:gap-0 lg:flex-row lg:items-start lg:justify-between px-2 py-2">
-				<div className="lg:flex-col w-full gap-10">
-					<SearchTab
-						refetch={() => {}}
-						setSearchList={setSearchList}
-						searchList={searchList}
-						search={search}
-						setSearch={setSearch}
-					/>
-					<FilterLabels
-						selectedDistricts={selectedDistricts}
-						selectedTenderValues={selectedTenderValues}
-						industry={industry}
-						classification={classification}
-						dateRange={dateRange}
-						setSelectedDistricts={setSelectedDistricts}
-						setSelectedTenderValues={setSelectedTenderValues}
-						setIndustry={setIndustry}
-						setClassification={setClassification}
-						setDateRange={setDateRange}
-						clearFilters={clearFilters}
-						dropdownData={dropdownData}
-						foryou={foryou}
-						showClosedTenders={showClosedTenders}
-						setShowClosedTenders={setShowClosedTenders}
-						states={states}
-						setStates={setStates}
-					/>
+			<div className="flex flex-col-reverse gap-6 lg:gap-6 lg:flex-row lg:items-start lg:justify-between px-2 py-2">
+				<div className="flex flex-col w-full gap-4">
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+						<div className="w-full">
+							<SearchTab
+								refetch={() => {}}
+								setSearchList={setSearchList}
+								searchList={searchList}
+								search={search}
+								setSearch={setSearch}
+							/>
+						</div>
+						<div className="w-full">
+							<ExactTenderIdSearch
+								exactTenderId={exactTenderId}
+								setExactTenderId={setExactTenderId}
+								refetch={refetch}
+							/>
+						</div>
+					</div>
+
+					<div className="w-full mt-2">
+						<FilterLabels
+							selectedDistricts={selectedDistricts}
+							selectedTenderValues={selectedTenderValues}
+							industry={industry}
+							classification={classification}
+							dateRange={dateRange}
+							setSelectedDistricts={setSelectedDistricts}
+							setSelectedTenderValues={setSelectedTenderValues}
+							setIndustry={setIndustry}
+							setClassification={setClassification}
+							setDateRange={setDateRange}
+							clearFilters={clearFilters}
+							dropdownData={dropdownData}
+							foryou={foryou}
+							showClosedTenders={showClosedTenders}
+							setShowClosedTenders={setShowClosedTenders}
+							states={states}
+							setStates={setStates}
+						/>
+					</div>
 				</div>
 				<div className="flex items-start gap-2">
 					<TenderFilters
