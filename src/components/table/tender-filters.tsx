@@ -31,6 +31,8 @@ interface TenderFiltersProps {
 	setShowClosedTenders: (show: boolean) => void;
 	states: any;
 	setStates: (states: any) => void;
+	exactTenderId?: string;
+	setExactTenderId?: (id: string) => void;
 }
 type DistrictMapping = {
 	[key: string]: string[];
@@ -198,16 +200,25 @@ export const FilterLabels = ({
 	setShowClosedTenders,
 	states,
 	setStates,
+	exactTenderId,
+	setExactTenderId,
 }: TenderFiltersProps) => {
+	const handleResetAll = () => {
+		clearFilters();
+		if (exactTenderId && setExactTenderId) {
+			setExactTenderId('');
+		}
+	};
 	return (
 		<div className="flex flex-wrap gap-2 ml-2 mt-2">
 			{(selectedDistricts?.length > 0 ||
 				selectedTenderValues ||
 				dateRange ||
 				industry.length > 0 ||
-				classification) && (
+				classification ||
+				exactTenderId) && (
 				<button
-					onClick={clearFilters}
+					onClick={handleResetAll}
 					className="px-4 rounded-md border py-2 text-xs bg-white hover:bg-gray-100"
 				>
 					Reset All

@@ -423,6 +423,8 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 							setShowClosedTenders={setShowClosedTenders}
 							states={states}
 							setStates={setStates}
+							exactTenderId={exactTenderId}
+							setExactTenderId={setExactTenderId}
 						/>
 					</div>
 				</div>
