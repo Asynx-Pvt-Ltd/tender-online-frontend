@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	Popover,
 	PopoverContent,
@@ -8,8 +8,15 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { TenderValueEnum } from '@/enums';
-import { Checkbox } from '../ui/checkbox';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select';
 
 interface TenderValueSliderProps {
 	selectedTenderValues: [number, number] | TenderValueEnum.REFERTHEDOCUMENT;
@@ -102,23 +109,25 @@ const TenderValueSlider = ({
 		setMaxInputValue(e.target.value);
 	};
 
-	const toggleMinUnit = () => {
-		if (minUnit === 'Cr') {
-			setMinUnit('L');
-			setMinInputValue((parseFloat(minInputValue) * 100).toFixed(2));
-		} else {
-			setMinUnit('Cr');
-			setMinInputValue((parseFloat(minInputValue) / 100).toFixed(2));
+	const handleMinUnitChange = (value: 'L' | 'Cr') => {
+		if (value !== minUnit) {
+			if (value === 'L') {
+				setMinInputValue((parseFloat(minInputValue) * 100).toFixed(2));
+			} else {
+				setMinInputValue((parseFloat(minInputValue) / 100).toFixed(2));
+			}
+			setMinUnit(value);
 		}
 	};
 
-	const toggleMaxUnit = () => {
-		if (maxUnit === 'Cr') {
-			setMaxUnit('L');
-			setMaxInputValue((parseFloat(maxInputValue) * 100).toFixed(2));
-		} else {
-			setMaxUnit('Cr');
-			setMaxInputValue((parseFloat(maxInputValue) / 100).toFixed(2));
+	const handleMaxUnitChange = (value: 'L' | 'Cr') => {
+		if (value !== maxUnit) {
+			if (value === 'L') {
+				setMaxInputValue((parseFloat(maxInputValue) * 100).toFixed(2));
+			} else {
+				setMaxInputValue((parseFloat(maxInputValue) / 100).toFixed(2));
+			}
+			setMaxUnit(value);
 		}
 	};
 
@@ -139,7 +148,6 @@ const TenderValueSlider = ({
 		}
 
 		setSliderRange([minValue, maxValue]);
-
 		setOpen(false);
 	};
 
@@ -173,131 +181,148 @@ const TenderValueSlider = ({
 				<PopoverTrigger asChild>
 					<Button
 						variant="outline"
-						className={`h-[5.3vh] px-3 text-sm rounded-md border-gray-300 ${
-							isFilterActive ? 'border-black text-black' : ''
+						className={`h-10 px-4 text-sm font-medium rounded-md border
 						}`}
 					>
 						Tender Value
 						{isFilterActive && (
-							<span className="ml-2 bg-gray-200 text-black text-xs font-medium rounded-full px-2 py-0.5">
+							<span className="ml-2 bg-blue-100 text-blue-800 text-xs font-medium rounded-full px-2 py-0.5">
 								1
 							</span>
 						)}
 					</Button>
 				</PopoverTrigger>
-				<PopoverContent className="w-64 p-4 bg-white shadow-lg border border-gray-200 rounded-md">
-					<div className="space-y-4">
-						<Label className="text-xs font-medium text-gray-700">
-							Select Tender Value Range (₹0 - ₹500Cr)
-						</Label>
-						{/* 
-						<div className="relative w-full h-6 mt-2">
-							<div className="absolute top-1/2 transform -translate-y-1/2 w-full h-2 bg-gray-200 rounded-full"></div>
+				<PopoverContent className="w-80 p-5 bg-white shadow-lg border border-gray-200 rounded-lg">
+					<div className="space-y-5">
+						<div>
+							<Label className="text-sm font-semibold text-gray-800 block mb-1">
+								Select Tender Value Range (₹0 - ₹500Cr)
+							</Label>
+							{/* {!referDocument && (
+								<div className="relative w-full h-8 mt-4 mb-6">
+									<div className="absolute top-1/2 transform -translate-y-1/2 w-full h-2 bg-gray-200 rounded-full"></div>
+									<div
+										className="absolute top-1/2 transform -translate-y-1/2 h-2 bg-blue-500 rounded-full"
+										style={{
+											left: `${(sliderRange[0] / MAX_VALUE) * 100}%`,
+											width: `${
+												((sliderRange[1] - sliderRange[0]) / MAX_VALUE) * 100
+											}%`,
+										}}
+									></div>
+									<div
+										className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 w-5 h-5 bg-white rounded-full border-2 border-blue-600 cursor-pointer shadow-md z-20"
+										style={{
+											left: `${(sliderRange[0] / MAX_VALUE) * 100}%`,
+										}}
+									></div>
+									<div
+										className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 w-5 h-5 bg-white rounded-full border-2 border-blue-600 cursor-pointer shadow-md z-20"
+										style={{
+											left: `${(sliderRange[1] / MAX_VALUE) * 100}%`,
+										}}
+									></div>
+									<Slider
+										value={[sliderRange[0], sliderRange[1]]}
+										min={MIN_VALUE}
+										max={MAX_VALUE}
+										step={0.1}
+										onValueChange={handleSliderChange}
+										className="absolute inset-0 opacity-0 z-30 cursor-pointer"
+										disabled={referDocument}
+									/>
+								</div>
+							)} */}
+						</div>
 
-							<div
-								className="absolute top-1/2 transform -translate-y-1/2 h-2 bg-black rounded-full"
-								style={{
-									left: `${(sliderRange[0] / MAX_VALUE) * 100}%`,
-									width: `${
-										((sliderRange[1] - sliderRange[0]) / MAX_VALUE) * 100
-									}%`,
-								}}
-							></div>
-
-							<div
-								className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-white rounded-full border-2 border-black cursor-pointer shadow-md z-20"
-								style={{
-									left: `${(sliderRange[0] / MAX_VALUE) * 100}%`,
-								}}
-							></div>
-
-							<div
-								className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-white rounded-full border-2 border-black cursor-pointer shadow-md z-20"
-								style={{
-									left: `${(sliderRange[1] / MAX_VALUE) * 100}%`,
-								}}
-							></div>
-
-							<Slider
-								value={[sliderRange[0], sliderRange[1]]}
-								min={MIN_VALUE}
-								max={MAX_VALUE}
-								step={0.1}
-								onValueChange={handleSliderChange}
-								className="absolute inset-0 opacity-0 z-30 cursor-pointer"
-								disabled={referDocument}
-							/>
-						</div> */}
-
-						{/* Custom input fields for min and max values */}
-						<div className="flex items-center justify-between mt-4">
-							<div className="w-[45%]">
-								<Label className="text-xs font-medium text-gray-700 mb-2 block">
+						<div className="flex items-start justify-between gap-4">
+							<div className="w-1/2">
+								<Label className="text-xs font-medium text-gray-700 mb-1.5 block">
 									Min Value
 								</Label>
-								<div className="flex">
+								<div className="flex gap-1">
 									<Input
 										type="number"
 										value={minInputValue}
 										onChange={handleMinInputChange}
-										className="w-full text-xs rounded-r-none"
+										className="w-full text-sm rounded-r-none h-10"
 										disabled={referDocument}
 										min="0"
 									/>
-									<Button
-										type="button"
-										onClick={toggleMinUnit}
-										className="rounded-l-none border border-l-0 h-9 px-2 bg-black hover:bg-gray-800 text-white"
+									<Select
+										value={minUnit}
+										onValueChange={(value) =>
+											handleMinUnitChange(value as 'L' | 'Cr')
+										}
 										disabled={referDocument}
 									>
-										{minUnit}
-									</Button>
+										<SelectTrigger className="w-16 h-10 rounded-l-none border-l-0 bg-gray-50">
+											<SelectValue placeholder={minUnit} />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem value="L">L</SelectItem>
+											<SelectItem value="Cr">Cr</SelectItem>
+										</SelectContent>
+									</Select>
 								</div>
 							</div>
-							<div className="w-[45%]">
-								<Label className="text-xs font-medium text-gray-700 mb-2 block">
+							<div className="w-1/2">
+								<Label className="text-xs font-medium text-gray-700 mb-1.5 block">
 									Max Value
 								</Label>
-								<div className="flex">
+								<div className="flex gap-1">
 									<Input
 										type="number"
 										value={maxInputValue}
 										onChange={handleMaxInputChange}
-										className="w-full text-xs rounded-r-none"
+										className="w-full text-sm rounded-r-none h-10"
 										disabled={referDocument}
 										min="0"
 									/>
-									<Button
-										type="button"
-										onClick={toggleMaxUnit}
-										className="rounded-l-none border border-l-0 h-9 px-2 bg-black hover:bg-gray-800 text-white"
+									<Select
+										value={maxUnit}
+										onValueChange={(value) =>
+											handleMaxUnitChange(value as 'L' | 'Cr')
+										}
 										disabled={referDocument}
 									>
-										{maxUnit}
-									</Button>
+										<SelectTrigger className="w-16 h-10 rounded-l-none border-l-0 bg-gray-50">
+											<SelectValue placeholder={maxUnit} />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem value="L">L</SelectItem>
+											<SelectItem value="Cr">Cr</SelectItem>
+										</SelectContent>
+									</Select>
 								</div>
 							</div>
 						</div>
 
-						<div className="flex items-center gap-2 justify-center">
-							<Checkbox
-								id="referDocument"
-								checked={referDocument}
-								onCheckedChange={(checked) => {
-									setReferDocument(checked as boolean);
-								}}
-							/>
-							<Label htmlFor="referDocument" className="text-sm cursor-pointer">
-								Refer the Document
-							</Label>
+						<div className="flex justify-center">
+							<div className="flex items-center space-x-2 px-4 py-2 rounded-md">
+								<Checkbox
+									id="referDocument"
+									checked={referDocument}
+									onCheckedChange={(checked) => {
+										setReferDocument(checked as boolean);
+									}}
+									className="h-4 w-4 text-blue-600"
+								/>
+								<Label
+									htmlFor="referDocument"
+									className="text-sm cursor-pointer text-gray-700"
+								>
+									Refer the Document
+								</Label>
+							</div>
 						</div>
 
-						<div className="text-center font-medium text-gray-800 text-sm">
+						<div className="text-center font-medium text-gray-800 text-sm py-2 bg-black/5 rounded-md">
 							{getDisplayRange()}
 						</div>
 
 						<Button
-							className="w-full bg-black hover:bg-gray-800 text-white h-8 text-sm rounded-md"
+							className="w-full bg-black hover:bg-black/80 text-white h-10 text-sm font-medium rounded-md"
 							onClick={handleApply}
 						>
 							Apply Filter
