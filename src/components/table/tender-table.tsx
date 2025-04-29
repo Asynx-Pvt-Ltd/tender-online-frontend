@@ -20,7 +20,6 @@ import {
 	TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useTenderFilters } from '@/components/hook/use-tender-filters';
 import TenderFilters, { FilterLabels } from './tender-filters';
 import SearchTab from './search-tab';
@@ -29,10 +28,18 @@ import TenderDetailsDialog from '../shared/TenderDetailsDialog';
 import TenderColumns, { formatDate } from './tender-columns';
 import { toast } from 'sonner';
 import { formatIndianRupeePrice, getTenderValueCategory } from '@/utils/utils';
-import { clear } from 'console';
 import SaveTenderButton from '../shared/saveButton';
 import { TenderValueEnum } from '@/enums';
 import ExactTenderIdSearch from './tenderID-search';
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '../ui/select';
+import { ScrollArea } from '../ui/scroll-area';
 
 interface ViewedTenderData {
 	tenderIds: string[];
@@ -117,6 +124,15 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 	const [page, setPage] = React.useState(0);
 	const [inputPage, setInputPage] = React.useState(1);
 
+	const [pageSize, setPageSize] = React.useState<number>(10);
+
+	const handlePageSizeChange = (value: string) => {
+		const newSize = parseInt(value);
+		setPageSize(newSize);
+		setPage(0); // Reset to first page when changing page size
+		setInputPage(1);
+	};
+
 	const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
 		// Only allow numeric input
@@ -182,8 +198,8 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 			if (showClosedTenders) {
 				params.append('showClosed', 'true');
 			}
-			params.append('limit', '10');
-			params.append('offset', (page * 10).toString());
+			params.append('limit', pageSize.toString());
+			params.append('offset', (page * pageSize).toString());
 
 			const response = await fetch(
 				process.env.NEXT_PUBLIC_API_ENDPOINT +
@@ -195,9 +211,28 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 			return response.json();
 		},
 	});
+	const totalPages = React.useMemo(
+		() => Math.max(1, Math.ceil((tenders?.count || 0) / pageSize)),
+		[tenders?.count, pageSize],
+	);
+
 	React.useEffect(() => {
 		refetch();
-	}, [selectedTenderValues, showClosedTenders, exactTenderId, refetch]);
+		setPage(0);
+		setInputPage(1);
+	}, [
+		selectedTenderValues,
+		showClosedTenders,
+		exactTenderId,
+		refetch,
+		pageSize,
+		selectedDistricts,
+		industry,
+		classification,
+		dateRange,
+		searchList,
+		states,
+	]);
 	const clearFilters = useCallback(() => {
 		setSelectedDistricts([]);
 		setSelectedTenderValues([]);
@@ -227,14 +262,12 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 			return prev;
 		});
 	}, []);
-
 	const table = useReactTable({
 		data: tenders?.result || [],
 		columns,
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 		onColumnVisibilityChange: setColumnVisibility,
@@ -460,73 +493,78 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 			</div>
 
 			<div className="w-full hidden sm:block md:block lg:block">
-				{/* <ScrollArea> */}
-				<Table className="min-w-full lg:overflow-hidden md:overflow-scroll">
-					<TableHeader>
-						{table.getHeaderGroups().map((headerGroup) => (
-							<TableRow key={headerGroup.id} className="hover:bg-transparent">
-								{headerGroup.headers.map((header) => (
-									<TableHead key={header.id}>
-										{header.isPlaceholder
-											? null
-											: flexRender(
-													header.column.columnDef.header,
-													header.getContext(),
-											  )}
-									</TableHead>
+				<div className="relative overflow-hidden">
+					<div className="h-[500px] overflow-y-auto overflow-x-hidden">
+						<Table className="min-w-full">
+							<TableHeader className="sticky top-0 bg-white z-10">
+								{table.getHeaderGroups().map((headerGroup) => (
+									<TableRow
+										key={headerGroup.id}
+										className="hover:bg-transparent"
+									>
+										{headerGroup.headers.map((header) => (
+											<TableHead key={header.id}>
+												{header.isPlaceholder
+													? null
+													: flexRender(
+															header.column.columnDef.header,
+															header.getContext(),
+													  )}
+											</TableHead>
+										))}
+									</TableRow>
 								))}
-							</TableRow>
-						))}
-					</TableHeader>
-					<TableBody>
-						{table.getRowModel().rows?.length ? (
-							table.getRowModel().rows.map((row) => (
-								<TableRow
-									key={row.id}
-									data-state={row.getIsSelected() && 'selected'}
-									className={`hover:scale-[1.01] transition-all ${
-										viewedTenders.includes(row.original._id)
-											? 'bg-purple-50 hover:bg-purple-100'
-											: ''
-									}`}
-								>
-									{row.getVisibleCells().map((cell) => (
-										<TableCell
-											key={cell.id}
-											className="cursor-pointer font-roboto"
-											onClick={() => {
-												if (cell.column.columnDef.id !== 'select') {
-													handleRowClick(row.original);
-												}
-											}}
+							</TableHeader>
+							<TableBody>
+								{table.getRowModel().rows?.length ? (
+									table.getRowModel().rows.map((row) => (
+										<TableRow
+											key={row.id}
+											data-state={row.getIsSelected() && 'selected'}
+											className={`transform-gpu hover:scale-[1] transition-all ${
+												viewedTenders.includes(row.original._id)
+													? 'bg-purple-50 hover:bg-purple-100'
+													: ''
+											}`}
 										>
-											{flexRender(
-												cell.column.columnDef.cell,
-												cell.getContext(),
-											)}
+											{row.getVisibleCells().map((cell) => (
+												<TableCell
+													key={cell.id}
+													className="cursor-pointer font-roboto whitespace-nowrap"
+													onClick={() => {
+														if (cell.column.columnDef.id !== 'select') {
+															handleRowClick(row.original);
+														}
+													}}
+												>
+													{flexRender(
+														cell.column.columnDef.cell,
+														cell.getContext(),
+													)}
+												</TableCell>
+											))}
+										</TableRow>
+									))
+								) : (
+									<TableRow>
+										<TableCell
+											colSpan={columns.length}
+											className="h-24 text-center"
+										>
+											No results.
 										</TableCell>
-									))}
-								</TableRow>
-							))
-						) : (
-							<TableRow>
-								<TableCell
-									colSpan={columns.length}
-									className="h-24 text-center"
-								>
-									No results.
-								</TableCell>
-							</TableRow>
-						)}
-					</TableBody>
-				</Table>
-				{/* </ScrollArea> */}
+									</TableRow>
+								)}
+							</TableBody>
+						</Table>
+					</div>
+				</div>
 				<TenderDetailsDialog
 					selectedRowData={selectedRowData}
 					setSelectedRowData={setSelectedRowData}
 				/>
 			</div>
-			<div className="w-full sm:hidden flex flex-col gap-2">
+			{/* <div className="w-full sm:hidden flex flex-col gap-2">
 				{table.getRowModel().rows?.length ? (
 					table.getRowModel().rows.map((row) => {
 						const tender = row.original;
@@ -585,68 +623,104 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 						No results.
 					</div>
 				)}
-			</div>
+			</div> */}
+
 			<div className="flex flex-col gap-2 lg:gap-0 lg:flex-row items-center justify-between px-4 py-4">
 				<div className="flex-1 text-sm text-muted-foreground">
 					{table.getFilteredSelectedRowModel().rows.length} of{' '}
 					{tenders?.count || 0} total
 				</div>
-				<div className="flex lg:flex-row lg:gap-0 gap-6 flex-col items-center space-x-8">
-					<div className="flex gap-2 items-center">
-						<div className="flex items-center space-x-2">
-							<span className="text-sm">Page</span>
-							<input
-								type="number"
-								value={inputPage}
-								onChange={handlePageInputChange}
-								min="1"
-								max={Math.ceil((tenders?.count || 0) / 10)}
-								className="w-16 px-2 py-1 border rounded text-sm"
-							/>
-							<Button variant="default" size="sm" onClick={handleGoToPage}>
-								Go
+				<div className="flex lg:flex-row lg:gap-0 gap-6 flex-col items-center lg:space-x-8">
+					{/* Items per page dropdown */}
+					<div className="flex items-center space-x-2">
+						<span className="text-sm whitespace-nowrap">Items per page</span>
+						<Select
+							value={pageSize.toString()}
+							onValueChange={handlePageSizeChange}
+						>
+							<SelectTrigger className="w-16 h-8">
+								<SelectValue />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectGroup>
+									<SelectItem value="5">5</SelectItem>
+									<SelectItem value="10">10</SelectItem>
+									<SelectItem value="20">20</SelectItem>
+									<SelectItem value="50">50</SelectItem>
+									<SelectItem value="100">100</SelectItem>
+								</SelectGroup>
+							</SelectContent>
+						</Select>
+					</div>
+
+					{/* Page input and navigation */}
+					<div className="flex lg:flex-row flex-col items-center lg:space-x-8 gap-4">
+						<div className="flex gap-2 items-center">
+							<div className="flex items-center space-x-2">
+								<span className="text-sm">Page</span>
+								<input
+									type="number"
+									value={inputPage}
+									onChange={handlePageInputChange}
+									min="1"
+									max={totalPages}
+									className="w-16 px-2 py-1 border rounded text-sm"
+								/>
+								<Button variant="default" size="sm" onClick={handleGoToPage}>
+									Go
+								</Button>
+							</div>
+							<div className="text-sm">of {totalPages}</div>
+						</div>
+						<div className="space-x-2">
+							<Button
+								variant="outline"
+								size="sm"
+								onClick={() => {
+									setPage(0);
+									setInputPage(1);
+								}}
+								disabled={page === 0}
+								className="text-black/35 hover:text-black/100"
+							>
+								First
+							</Button>
+							<Button
+								variant="outline"
+								size="sm"
+								onClick={() => {
+									const lastPage = totalPages - 1;
+									setPage(lastPage);
+									setInputPage(totalPages);
+								}}
+								disabled={page >= totalPages - 1}
+								className="text-black/35 hover:text-black/100"
+							>
+								Last
+							</Button>
+							<Button
+								variant="default"
+								size="sm"
+								onClick={() => {
+									setPage((p) => p - 1);
+									setInputPage(page);
+								}}
+								disabled={page === 0}
+							>
+								Previous
+							</Button>
+							<Button
+								variant="default"
+								size="sm"
+								onClick={() => {
+									setPage((p) => p + 1);
+									setInputPage(page + 2);
+								}}
+								disabled={page >= totalPages - 1}
+							>
+								Next
 							</Button>
 						</div>
-
-						<div className="text-sm">
-							of {Math.ceil((tenders?.count || 0) / 10)}
-						</div>
-					</div>
-					<div className="space-x-2">
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => setPage(0)}
-							disabled={page === 0}
-							className="text-black/35 hover:text-black/100"
-						>
-							First
-						</Button>
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => setPage(Math.ceil((tenders?.count || 0) / 10) - 1)}
-							disabled={page >= Math.ceil((tenders?.count || 0) / 10) - 1}
-							className="text-black/35 hover:text-black/100"
-						>
-							Last
-						</Button>
-						<Button
-							variant="default"
-							size="sm"
-							onClick={() => setPage((p) => p - 1)}
-							disabled={page === 0}
-						>
-							Previous
-						</Button>
-						<Button
-							variant="default"
-							size="sm"
-							onClick={() => setPage((p) => p + 1)}
-							disabled={page >= Math.ceil((tenders?.count || 0) / 10) - 1}
-						>
-							Next
-						</Button>
 					</div>
 				</div>
 			</div>
