@@ -493,78 +493,73 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 			</div>
 
 			<div className="w-full hidden sm:block md:block lg:block">
-				<div className="relative overflow-hidden">
-					<div className="h-[500px] overflow-y-auto overflow-x-hidden">
-						<Table className="min-w-full">
-							<TableHeader className="sticky top-0 bg-white z-10">
-								{table.getHeaderGroups().map((headerGroup) => (
-									<TableRow
-										key={headerGroup.id}
-										className="hover:bg-transparent"
-									>
-										{headerGroup.headers.map((header) => (
-											<TableHead key={header.id}>
-												{header.isPlaceholder
-													? null
-													: flexRender(
-															header.column.columnDef.header,
-															header.getContext(),
-													  )}
-											</TableHead>
-										))}
-									</TableRow>
+				{/* <ScrollArea> */}
+				<Table className="min-w-full lg:overflow-hidden md:overflow-scroll">
+					<TableHeader>
+						{table.getHeaderGroups().map((headerGroup) => (
+							<TableRow key={headerGroup.id} className="hover:bg-transparent">
+								{headerGroup.headers.map((header) => (
+									<TableHead key={header.id}>
+										{header.isPlaceholder
+											? null
+											: flexRender(
+													header.column.columnDef.header,
+													header.getContext(),
+											  )}
+									</TableHead>
 								))}
-							</TableHeader>
-							<TableBody>
-								{table.getRowModel().rows?.length ? (
-									table.getRowModel().rows.map((row) => (
-										<TableRow
-											key={row.id}
-											data-state={row.getIsSelected() && 'selected'}
-											className={`transform-gpu hover:scale-[1] transition-all ${
-												viewedTenders.includes(row.original._id)
-													? 'bg-purple-50 hover:bg-purple-100'
-													: ''
-											}`}
-										>
-											{row.getVisibleCells().map((cell) => (
-												<TableCell
-													key={cell.id}
-													className="cursor-pointer font-roboto whitespace-nowrap"
-													onClick={() => {
-														if (cell.column.columnDef.id !== 'select') {
-															handleRowClick(row.original);
-														}
-													}}
-												>
-													{flexRender(
-														cell.column.columnDef.cell,
-														cell.getContext(),
-													)}
-												</TableCell>
-											))}
-										</TableRow>
-									))
-								) : (
-									<TableRow>
+							</TableRow>
+						))}
+					</TableHeader>
+					<TableBody>
+						{table.getRowModel().rows?.length ? (
+							table.getRowModel().rows.map((row) => (
+								<TableRow
+									key={row.id}
+									data-state={row.getIsSelected() && 'selected'}
+									className={`hover:scale-[1.01] transition-all ${
+										viewedTenders.includes(row.original._id)
+											? 'bg-purple-50 hover:bg-purple-100'
+											: ''
+									}`}
+								>
+									{row.getVisibleCells().map((cell) => (
 										<TableCell
-											colSpan={columns.length}
-											className="h-24 text-center"
+											key={cell.id}
+											className="cursor-pointer font-roboto"
+											onClick={() => {
+												if (cell.column.columnDef.id !== 'select') {
+													handleRowClick(row.original);
+												}
+											}}
 										>
-											No results.
+											{flexRender(
+												cell.column.columnDef.cell,
+												cell.getContext(),
+											)}
 										</TableCell>
-									</TableRow>
-								)}
-							</TableBody>
-						</Table>
-					</div>
-				</div>
+									))}
+								</TableRow>
+							))
+						) : (
+							<TableRow>
+								<TableCell
+									colSpan={columns.length}
+									className="h-24 text-center"
+								>
+									No results.
+								</TableCell>
+							</TableRow>
+						)}
+					</TableBody>
+				</Table>
+				{/* </ScrollArea> */}
 				<TenderDetailsDialog
 					selectedRowData={selectedRowData}
 					setSelectedRowData={setSelectedRowData}
 				/>
 			</div>
-			{/* <div className="w-full sm:hidden flex flex-col gap-2">
+			<div className="w-full sm:hidden flex flex-col gap-2">
 				{table.getRowModel().rows?.length ? (
 					table.getRowModel().rows.map((row) => {
 						const tender = row.original;
@@ -623,8 +618,7 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 						No results.
 					</div>
 				)}
-			</div> */}
-
+			</div>
 			<div className="flex flex-col gap-2 lg:gap-0 lg:flex-row items-center justify-between px-4 py-4">
 				<div className="flex-1 text-sm text-muted-foreground">
 					{table.getFilteredSelectedRowModel().rows.length} of{' '}
