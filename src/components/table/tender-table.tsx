@@ -559,7 +559,7 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 					setSelectedRowData={setSelectedRowData}
 				/>
 			</div>
-			<div className="w-full sm:hidden flex flex-col gap-2">
+			<div className="w-full sm:hidden flex flex-col gap-2 h-[400px] overflow-y-auto overflow-x-auto sm:overflow-x-visible">
 				{table.getRowModel().rows?.length ? (
 					table.getRowModel().rows.map((row) => {
 						const tender = row.original;
@@ -626,7 +626,7 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 				</div>
 				<div className="flex lg:flex-row lg:gap-0 gap-6 flex-col items-center lg:space-x-8">
 					{/* Items per page dropdown */}
-					<div className="flex items-center space-x-2">
+					<div className="flex items-center space-x-2 my-5 lg:mb-0">
 						<span className="text-sm whitespace-nowrap">Items per page</span>
 						<Select
 							value={pageSize.toString()}
