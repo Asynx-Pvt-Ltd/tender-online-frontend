@@ -112,9 +112,14 @@ export default function TenderColumns() {
 			enableHiding: false,
 		},
 		{
+			id: 'tenderInformation',
 			accessorFn: (row) =>
 				`${row.department} - ${row.tenderName} - ${row.classification}`,
-			header: 'Tender Information',
+			header: ({ column }) => (
+				<div className="text-xs text-gray-500" title="Tender Information">
+					Tender Information
+				</div>
+			),
 			cell: ({ row }) => {
 				const department = row.original.department;
 				const tenderName = row.original.tenderName;
@@ -171,7 +176,7 @@ export default function TenderColumns() {
 		{
 			accessorKey: 'district',
 			header: ({ column }) => (
-				<div className="ml-4 text-xs text-gray-500" title="District">
+				<div className="ml-7 text-xs text-gray-500" title="District">
 					District
 				</div>
 			),
@@ -184,15 +189,31 @@ export default function TenderColumns() {
 		{
 			accessorKey: 'emdValue',
 			header: ({ column }) => (
-				<div className="ml-3 text-xs text-gray-500" title="EMD Value">
-					EMD Value
-				</div>
+				<Button
+					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+					className="text-center text-xs text-gray-500"
+					variant="ghost"
+					title="EMD Value (₹)"
+				>
+					EMD Value (₹)
+					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
 			),
 			cell: ({ row }) => (
 				<div className="line-clamp-2 text-center text-xs" title="EMD Value">
-					{row.original.EMDAmountin}
+					{formatIndianRupeePrice(row.original.EMDAmountin)}
 				</div>
 			),
+			sortingFn: (rowA, rowB, columnId) => {
+				const valueA = Number(
+					String(rowA.original.EMDAmountin || '0').replace(/,/g, ''),
+				);
+				const valueB = Number(
+					String(rowB.original.EMDAmountin || '0').replace(/,/g, ''),
+				);
+
+				return valueA - valueB;
+			},
 		},
 		{
 			accessorKey: 'EMD Exemption Allowed',
@@ -244,7 +265,11 @@ export default function TenderColumns() {
 		},
 		{
 			id: 'save',
-			header: 'Actions',
+			header: ({ column }) => (
+				<div className="text-xs text-gray-500" title="Actions">
+					Actions
+				</div>
+			),
 			cell: ({ row }) => <SaveTenderButton tenderId={row.original._id} />,
 			enableSorting: false,
 			enableHiding: false,
