@@ -172,6 +172,7 @@ export default function TenderColumns() {
 					{formatDate(row.getValue('bidSubmissionDate'))}
 				</div>
 			),
+			id: 'bidSubmissionDate',
 		},
 		{
 			accessorKey: 'district',
@@ -204,16 +205,7 @@ export default function TenderColumns() {
 					{formatIndianRupeePrice(row.original.EMDAmountin)}
 				</div>
 			),
-			sortingFn: (rowA, rowB, columnId) => {
-				const valueA = Number(
-					String(rowA.original.EMDAmountin || '0').replace(/,/g, ''),
-				);
-				const valueB = Number(
-					String(rowB.original.EMDAmountin || '0').replace(/,/g, ''),
-				);
-
-				return valueA - valueB;
-			},
+			id: 'emdValue',
 		},
 		{
 			accessorKey: 'EMD Exemption Allowed',
@@ -252,16 +244,7 @@ export default function TenderColumns() {
 					{formatIndianRupeePrice(row.getValue('tenderValue'))}
 				</div>
 			),
-			sortingFn: (rowA, rowB, columnId) => {
-				const valueA = Number(
-					String(rowA.getValue(columnId)).replace(/,/g, ''),
-				);
-				const valueB = Number(
-					String(rowB.getValue(columnId)).replace(/,/g, ''),
-				);
-
-				return valueA - valueB;
-			},
+			id: 'tenderValue',
 		},
 		{
 			id: 'save',
