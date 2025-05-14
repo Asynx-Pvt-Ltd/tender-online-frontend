@@ -162,10 +162,13 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 			'tenders',
 			buildQueryParams().toString(),
 			page,
+			pageSize,
 			Array.isArray(selectedTenderValues)
 				? selectedTenderValues.join(',')
 				: selectedTenderValues,
-			sorting,
+			sorting.length > 0
+				? `${sorting[0].id}-${sorting[0].desc ? 'desc' : 'asc'}`
+				: 'default',
 			showClosedTenders,
 		],
 		queryFn: async () => {
@@ -217,6 +220,13 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 	);
 
 	React.useEffect(() => {
+		if (sorting.length > 0) {
+			setPage(0);
+			setInputPage(1);
+		}
+	}, [sorting]);
+
+	React.useEffect(() => {
 		refetch();
 		setPage(0);
 		setInputPage(1);
@@ -232,6 +242,7 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 		dateRange,
 		searchList,
 		states,
+		sorting,
 	]);
 	const clearFilters = useCallback(() => {
 		setSelectedDistricts([]);
@@ -268,10 +279,12 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
-		getSortedRowModel: getSortedRowModel(),
+
+		// getSortedRowModel: getSortedRowModel(), //old default sorting
 		getFilteredRowModel: getFilteredRowModel(),
 		onColumnVisibilityChange: setColumnVisibility,
 		onRowSelectionChange: setRowSelection,
+		manualSorting: true,
 		state: {
 			sorting,
 			columnFilters,
