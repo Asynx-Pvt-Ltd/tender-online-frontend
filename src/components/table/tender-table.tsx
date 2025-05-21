@@ -637,9 +637,125 @@ export function DataTableTender({ setSearch, search, setTenderLength }: any) {
 					{table.getFilteredSelectedRowModel().rows.length} of{' '}
 					{tenders?.count || 0} total
 				</div>
+
 				<div className="flex lg:flex-row lg:gap-0 gap-6 flex-col items-center lg:space-x-8">
+					{/* Number pagination */}
+					<div className="flex items-center justify-center space-x-2 py-4">
+						<Button
+							variant="outline"
+							size="icon"
+							onClick={() => {
+								setPage((p) => Math.max(0, p - 1));
+								setInputPage(page);
+							}}
+							disabled={page === 0}
+							className="w-10 h-10 rounded-md"
+						>
+							<span>&lt;</span>
+						</Button>
+
+						{/* First Page */}
+						<Button
+							variant={page === 0 ? 'default' : 'outline'}
+							size="icon"
+							onClick={() => {
+								setPage(0);
+								setInputPage(1);
+							}}
+							className={`w-10 h-10 rounded-md ${
+								page === 0 ? 'text-black/35 text-white' : ''
+							}`}
+						>
+							1
+						</Button>
+
+						{/* Ellipsis after first page (if current page > 2) */}
+						{page > 2 && (
+							<div className="flex items-center justify-center w-10 h-10">
+								<span>...</span>
+							</div>
+						)}
+
+						{/* Current Page - 1 (if not first page and not second page) */}
+						{page > 1 && page <= totalPages - 1 && (
+							<Button
+								variant="outline"
+								size="icon"
+								onClick={() => {
+									setPage(page - 1);
+									setInputPage(page);
+								}}
+								className="w-10 h-10 rounded-md"
+							>
+								{page}
+							</Button>
+						)}
+
+						{/* Current Page (if not first page) */}
+						{page > 0 && page < totalPages - 1 && (
+							<Button
+								variant="default"
+								size="icon"
+								className="w-10 h-10 rounded-md text-black/35 text-white"
+							>
+								{page + 1}
+							</Button>
+						)}
+
+						{/* Current Page + 1 (if not last page or second-to-last page) */}
+						{page < totalPages - 2 && (
+							<Button
+								variant="outline"
+								size="icon"
+								onClick={() => {
+									setPage(page + 1);
+									setInputPage(page + 2);
+								}}
+								className="w-10 h-10 rounded-md"
+							>
+								{page + 2}
+							</Button>
+						)}
+
+						{/* Ellipsis before last page (if current page < totalPages - 3) */}
+						{page < totalPages - 3 && (
+							<div className="flex items-center justify-center w-10 h-10">
+								<span>...</span>
+							</div>
+						)}
+
+						{/* Last Page */}
+						{totalPages > 1 && (
+							<Button
+								variant={page === totalPages - 1 ? 'default' : 'outline'}
+								size="icon"
+								onClick={() => {
+									setPage(totalPages - 1);
+									setInputPage(totalPages);
+								}}
+								className={`w-10 h-10 rounded-md ${
+									page === totalPages - 1 ? 'text-black/35 text-white' : ''
+								}`}
+							>
+								{totalPages}
+							</Button>
+						)}
+
+						<Button
+							variant="outline"
+							size="icon"
+							onClick={() => {
+								setPage((p) => Math.min(totalPages - 1, p + 1));
+								setInputPage(page + 2);
+							}}
+							disabled={page >= totalPages - 1}
+							className="w-10 h-10 rounded-md"
+						>
+							<span>&gt;</span>
+						</Button>
+					</div>
 					{/* Items per page dropdown */}
-					<div className="flex items-center space-x-2 my-5 lg:mb-0">
+					<div className="flex items-center space-x-2 my-5 lg:mb-5">
 						<span className="text-sm whitespace-nowrap">Items per page</span>
 						<Select
 							value={pageSize.toString()}
