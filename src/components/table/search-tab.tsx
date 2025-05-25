@@ -73,9 +73,8 @@ const SearchTab: FC<SearchTabProps> = ({
 				<div className="flex flex-wrap mt-4 gap-2">
 					{searchList.map((tag, index) => (
 						<div
-							onClick={() => handleRemoveTag(index)}
 							key={index}
-							className="bg-gray-100 text-xs text-gray-800 px-2 py-1 rounded-full flex items-center space-x-1 cursor-pointer"
+							className="bg-gray-100 text-xs text-gray-800 px-2 py-1 rounded-full flex items-center space-x-1"
 						>
 							<span>{tag}</span>
 							<button
