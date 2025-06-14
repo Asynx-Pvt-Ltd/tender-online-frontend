@@ -159,7 +159,7 @@ const LoginForm = ({ setIsLogin, setLoading, loading }: any) => {
 	}
 
 	return (
-		<div className="min-h-[70vh] w-full flex items-center justify-center px-4 sm:px-6 lg:px-8 specific-devices-position-login lg:min-h-screen">
+		<div className="min-h-[70vh] w-full flex items-start lg:pt-[10vh] pt-[15vh] justify-center px-4 sm:px-6 lg:px-8 specific-devices-position-login lg:min-h-screen">
 			<div className="w-full max-w-md bg-white border border-gray-200 rounded-3xl shadow-lg dark:bg-neutral-900 dark:border-neutral-700">
 				<div className="p-6 sm:p-8 md:p-10">
 					<div className="text-center">

@@ -235,9 +235,9 @@ export default function Home() {
 								)}
 							>
 								<div className="flex flex-col-reverse justify-center items-center lg:gap-2">
-									<div className="pt-5">
+									{/* <div className="pt-5">
 										<StickyNotice />
-									</div>
+									</div> */}
 									<div className="text-xl font-normal">
 										<h4 className="lg:w-[70%] mx-auto lg:pt-[2vh] text-[14px] leading-tight lg:text-[18px] text-balance lg:text-pretty pt-2">
 											A hassle-free, premium bidding experience specializing in
@@ -415,7 +415,7 @@ export default function Home() {
 						</div>
 					</div>
 					{!isLoggedIn && (
-						<div className="w-full lg:w-[35%] flex items-start lg:items-center justify-center lg:justify-center lg:mt-0 pt-[45vh] lg:pt-0 ">
+						<div className="w-full lg:w-[35%] flex items-start lg:items-center justify-center lg:justify-center lg:mt-0 pt-[20vh] lg:pt-0 ">
 							{isLogin ? (
 								<LoginForm
 									setLoading={setLoading}
@@ -429,7 +429,7 @@ export default function Home() {
 					)}
 				</div>
 			) : (
-				<div className="flex lg:h-screen w-[80%] mx-auto lg:w-full items-center justify-center">
+				<div className="flex lg:h-screen w-[80%] mx-auto lg:w-full items-center justify-start">
 					{/* Left Pane */}
 					<div className="w-full lg:flex h-screen relative items-center justify-center flex-1 text-black">
 						<div className=" text-center  w-full relative h-full">
@@ -617,7 +617,7 @@ export default function Home() {
 						</div>
 					</div>
 					{!isLoggedIn && (
-						<div className="w-full lg:w-[40%] flex items-start lg:items-center justify-center lg:justify-center">
+						<div className="w-full lg:w-[40%] flex items-start lg:items-center justify-center lg:justify-start">
 							{isLogin ? (
 								<LoginForm
 									setLoading={setLoading}
