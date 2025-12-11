@@ -69,5 +69,12 @@
     "postcss-simple-vars": "^7.0.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "jss",
+      "unrs-resolver",
+      "yarn"
+    ]
   }
 }
